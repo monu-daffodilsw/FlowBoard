@@ -1,32 +1,70 @@
 'use client';
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { ReactNode } from 'react';
+import { Pressable } from '@/components/core/Pressable';
+import { Text } from '@/components/core/Text';
 import { cn } from '@/lib/utils';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   children: ReactNode;
+  onPress?: () => void;  // universal handler
+  onClick?: () => void;  // web alias (maps to onPress)
+  disabled?: boolean;
+  className?: string;
+  type?: 'button' | 'submit' | 'reset'; // web only, ignored on native
 }
 
-export function Button({ variant = 'primary', size = 'md', className, children, ...props }: ButtonProps) {
-  const base = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0f1e] disabled:opacity-50 disabled:cursor-not-allowed';
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  className,
+  children,
+  onPress,
+  onClick,
+  disabled,
+  type = 'button',
+}: ButtonProps) {
+  const base = 'flex-row items-center justify-center rounded-xl';
 
   const variants = {
-    primary: 'bg-indigo-500 hover:bg-indigo-400 text-white focus:ring-indigo-500 shadow-lg shadow-indigo-500/20',
-    secondary: 'bg-white/10 hover:bg-white/20 text-white border border-white/10 focus:ring-white/30',
-    ghost: 'bg-transparent hover:bg-white/10 text-white/70 hover:text-white focus:ring-white/20',
-    danger: 'bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 focus:ring-red-500',
+    primary: 'bg-indigo-500 active:bg-indigo-400',
+    secondary: 'bg-white/10 border border-white/10',
+    ghost: 'bg-transparent',
+    danger: 'bg-red-500/20 border border-red-500/30',
+  };
+
+  const textVariants = {
+    primary: 'text-white font-semibold',
+    secondary: 'text-white',
+    ghost: 'text-white/70',
+    danger: 'text-red-400',
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-xs gap-1.5',
-    md: 'px-4 py-2 text-sm gap-2',
-    lg: 'px-6 py-3 text-base gap-2',
+    sm: { view: 'px-3 py-1.5 gap-1.5', text: 'text-xs' },
+    md: { view: 'px-4 py-2 gap-2', text: 'text-sm' },
+    lg: { view: 'px-6 py-3 gap-2', text: 'text-base' },
   };
 
   return (
-    <button className={cn(base, variants[variant], sizes[size], className)} {...props}>
-      {children}
-    </button>
+    <Pressable
+      onPress={onPress ?? onClick}
+      disabled={disabled}
+      type={type}
+      className={cn(
+        base,
+        variants[variant],
+        sizes[size].view,
+        disabled && 'opacity-50',
+        className
+      )}
+    >
+      {typeof children === 'string' ? (
+        <Text className={cn(sizes[size].text, textVariants[variant])}>{children}</Text>
+      ) : (
+        children
+      )}
+    </Pressable>
   );
 }
