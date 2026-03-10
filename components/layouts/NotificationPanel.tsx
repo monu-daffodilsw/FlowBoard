@@ -2,6 +2,9 @@
 import { Notification } from '@/types';
 import { formatDate } from '@/utils/utils';
 import { Button } from '@/components/ui/Button';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
+import { ScrollView } from '@/components/core/ScrollView';
 
 interface NotificationPanelProps {
   notifications: Notification[];
@@ -13,28 +16,30 @@ export function NotificationPanel({ notifications, onMarkAllRead, onClose }: Not
   const recent = notifications.slice(0, 10);
 
   return (
-    <div className="absolute right-0 top-12 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-[#0d1526] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-        <h3 className="text-sm font-semibold text-white">Notifications</h3>
-        <Button variant="ghost" size="sm" onClick={onMarkAllRead}>Mark all read</Button>
-      </div>
-      <div className="max-h-80 overflow-y-auto overscroll-contain">
+    <View className="absolute right-0 top-12 w-80 bg-[#0d1526] border border-white/10 rounded-xl shadow-2xl overflow-hidden" style={{ zIndex: 50 }}>
+      <View className="flex-row items-center justify-between px-4 py-3 border-b border-white/10">
+        <Text className="text-sm font-semibold text-white">Notifications</Text>
+        <Button variant="ghost" size="sm" onPress={onMarkAllRead}>Mark all read</Button>
+      </View>
+      <ScrollView style={{ maxHeight: 320 }}>
         {recent.length === 0 ? (
-          <div className="px-4 py-8 text-center text-white/30 text-sm">No notifications yet</div>
+          <View className="px-4 py-8 items-center">
+            <Text className="text-white/30 text-sm">No notifications yet</Text>
+          </View>
         ) : (
           recent.map(n => (
-            <div key={n.id} className={`px-4 py-3 border-b border-white/5 last:border-0 ${!n.read ? 'bg-indigo-500/5' : ''}`}>
-              <div className="flex items-start gap-2">
-                {!n.read && <div className="w-2 h-2 rounded-full bg-indigo-400 mt-1.5 flex-shrink-0" />}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white/80">{n.message}</p>
-                  <p className="text-xs text-white/30 mt-0.5">{formatDate(n.createdAt)}</p>
-                </div>
-              </div>
-            </div>
+            <View key={n.id} className={`px-4 py-3 border-b border-white/5 ${!n.read ? 'bg-indigo-500/5' : ''}`}>
+              <View className="flex-row items-start gap-2">
+                {!n.read && <View className="w-2 h-2 rounded-full bg-indigo-400 mt-1.5 flex-shrink-0" />}
+                <View className="flex-1">
+                  <Text className="text-sm text-white/80">{n.message}</Text>
+                  <Text className="text-xs text-white/30 mt-0.5">{formatDate(n.createdAt)}</Text>
+                </View>
+              </View>
+            </View>
           ))
         )}
-      </div>
-    </div>
+      </ScrollView>
+    </View>
   );
 }

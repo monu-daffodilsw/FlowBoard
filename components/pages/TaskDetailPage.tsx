@@ -6,6 +6,7 @@ import { useProjects } from '@/hooks/useProjects';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useClipboard } from '@/hooks/useClipboard';
+import { useCurrentUrl } from '@/hooks/useCurrentUrl';
 import { TaskStatus, TaskPriority } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Input';
@@ -15,6 +16,12 @@ import { FileDropZone } from '@/components/forms/FileDropZone';
 import { SpeechNotes } from '@/components/cards/SpeechNotes';
 import { formatDate } from '@/utils/utils';
 import { Badge, statusBadge, priorityBadge } from '@/components/ui/Badge';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
+import { Pressable } from '@/components/core/Pressable';
+import { TextInput } from '@/components/core/TextInput';
+import { Svg } from '@/components/core/Svg';
+import { Path } from '@/components/core/Path';
 
 const STATUSES: TaskStatus[] = ['Backlog', 'In Progress', 'In Review', 'Done'];
 const PRIORITIES: TaskPriority[] = ['Low', 'Medium', 'High', 'Critical'];
@@ -28,6 +35,7 @@ export default function TaskDetailPage() {
   const { addNotification } = useNotifications();
   const { copy, copied } = useClipboard();
   const { visible: toastVisible, message: toastMsg, show: showToast } = useToast();
+  const currentUrl = useCurrentUrl();
 
   const task = getTask(taskId);
   const project = getProject(projectId);
@@ -41,11 +49,7 @@ export default function TaskDetailPage() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (task) {
-      setTitle(task.title);
-      setDescription(task.description);
-      setNotes(task.notes);
-    }
+    if (task) { setTitle(task.title); setDescription(task.description); setNotes(task.notes); }
   }, [task?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const scheduleSave = useCallback((updates: Record<string, unknown>) => {
@@ -57,9 +61,7 @@ export default function TaskDetailPage() {
 
   const handleTitleSave = () => {
     setEditingTitle(false);
-    if (title !== task?.title) {
-      updateTask(taskId, { title }, `Title changed to "${title}"`);
-    }
+    if (title !== task?.title) updateTask(taskId, { title }, `Title changed to "${title}"`);
   };
 
   const handleStatusChange = (status: TaskStatus) => {
@@ -67,13 +69,8 @@ export default function TaskDetailPage() {
     if (status === 'Done') addNotification(`Task "${task?.title}" marked as Done 🎉`, true);
   };
 
-  const handlePriorityChange = (priority: TaskPriority) => {
-    updateTask(taskId, { priority }, `Priority changed to ${priority}`);
-  };
-
   const handleCopyLink = () => {
-    copy(window.location.href);
-    showToast('Link copied!');
+    if (currentUrl) { copy(currentUrl); showToast('Link copied!'); }
   };
 
   const handleAddComment = () => {
@@ -84,214 +81,167 @@ export default function TaskDetailPage() {
 
   if (!task) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-white/30">
-        <p className="text-lg mb-4">Task not found</p>
-        <Button variant="ghost" onClick={() => router.navigate('projectBoard', { id: projectId })}>← Back to Board</Button>
-      </div>
+      <View className="items-center justify-center h-64">
+        <Text className="text-lg text-white/30 mb-4">Task not found</Text>
+        <Button variant="ghost" onPress={() => router.navigate('projectBoard', { id: projectId })}>← Back to Board</Button>
+      </View>
     );
   }
 
   return (
-    <div className="max-w-4xl">
+    <View className="max-w-4xl">
       <Toast message={toastMsg} visible={toastVisible || copied} />
 
       {/* Breadcrumb */}
-      <div className="flex items-center gap-1.5 mb-4 text-xs sm:text-sm text-white/40 flex-wrap">
-        <button onClick={() => router.navigate('projects')} className="hover:text-white transition-colors">Projects</button>
-        <span>/</span>
-        <button onClick={() => router.navigate('projectBoard', { id: projectId })} className="hover:text-white transition-colors truncate max-w-[100px] sm:max-w-[180px]">
-          {project?.name}
-        </button>
-        <span>/</span>
-        <span className="text-white/60 truncate max-w-[120px] sm:max-w-[240px]">{task.title}</span>
-      </div>
+      <View className="flex-row items-center gap-1.5 mb-4 flex-wrap">
+        <Pressable onPress={() => router.navigate('projects')}>
+          <Text className="text-sm text-white/40 hover:text-white transition-colors">Projects</Text>
+        </Pressable>
+        <Text className="text-sm text-white/40">/</Text>
+        <Pressable onPress={() => router.navigate('projectBoard', { id: projectId })}>
+          <Text className="text-sm text-white/40 hover:text-white transition-colors" numberOfLines={1}>{project?.name}</Text>
+        </Pressable>
+        <Text className="text-sm text-white/40">/</Text>
+        <Text className="text-sm text-white/60" numberOfLines={1}>{task.title}</Text>
+      </View>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+      <View className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Main content */}
-        <div className="lg:col-span-2 space-y-4 sm:space-y-5">
+        <View className="lg:col-span-2 gap-4">
           {/* Title */}
-          <div>
+          <View>
             {editingTitle ? (
-              <input
+              <TextInput
                 autoFocus
-                type="text"
                 value={title}
-                onChange={e => setTitle(e.target.value)}
+                onChangeText={setTitle}
                 onBlur={handleTitleSave}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') handleTitleSave();
-                  if (e.key === 'Escape') { setTitle(task.title); setEditingTitle(false); }
-                }}
-                className="w-full text-xl sm:text-2xl font-bold bg-transparent text-white border-b border-indigo-500 focus:outline-none pb-1"
-                style={{ fontFamily: 'Space Mono, monospace' }}
+                onSubmitEditing={handleTitleSave}
+                className="w-full text-xl font-bold bg-transparent text-white border-b border-indigo-500 pb-1"
+                style={{ fontFamily: 'Space Mono, monospace' } as object}
               />
             ) : (
-              <div className="flex items-start gap-2 group">
-                <h1
-                  className="text-xl sm:text-2xl font-bold text-white cursor-text flex-1 leading-tight"
-                  style={{ fontFamily: 'Space Mono, monospace' }}
-                  onClick={() => setEditingTitle(true)}
-                >
-                  {task.title}
-                </h1>
-                <button
-                  onClick={() => setEditingTitle(true)}
-                  className="p-2 rounded text-white/30 hover:text-white hover:bg-white/10 transition-all mt-0.5 flex-shrink-0"
-                  aria-label="Edit title"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </button>
-              </div>
+              <View className="flex-row items-start gap-2">
+                <Pressable onPress={() => setEditingTitle(true)} className="flex-1">
+                  <Text className="text-xl font-bold text-white leading-tight" style={{ fontFamily: 'Space Mono, monospace' } as object}>
+                    {task.title}
+                  </Text>
+                </Pressable>
+                <Pressable onPress={() => setEditingTitle(true)} className="p-2 rounded mt-0.5 flex-shrink-0">
+                  <Svg size={16} fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24">
+                    <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </Svg>
+                </Pressable>
+              </View>
             )}
-          </div>
+          </View>
 
-          {/* Mobile-only collapsible properties */}
-          <div className="lg:hidden">
-            <button
-              onClick={() => setPropsExpanded(v => !v)}
-              className="w-full flex items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5 text-sm text-white/70"
+          {/* Mobile collapsible properties */}
+          <View className="lg:hidden">
+            <Pressable
+              onPress={() => setPropsExpanded(v => !v)}
+              className="w-full flex-row items-center justify-between p-3 rounded-xl border border-white/10 bg-white/5"
             >
-              <div className="flex items-center gap-2">
+              <View className="flex-row items-center gap-2">
                 <Badge variant={statusBadge(task.status)}>{task.status}</Badge>
                 <Badge variant={priorityBadge(task.priority)}>{task.priority}</Badge>
-                {task.dueDate && <span className="text-white/40 text-xs">{formatDate(task.dueDate)}</span>}
-              </div>
-              <svg className={`w-4 h-4 transition-transform ${propsExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
+                {task.dueDate && <Text className="text-white/40 text-xs">{formatDate(task.dueDate)}</Text>}
+              </View>
+              <Svg size={16} fill="none" stroke="rgba(255,255,255,0.5)" viewBox="0 0 24 24" className={propsExpanded ? 'rotate-180' : ''}>
+                <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </Svg>
+            </Pressable>
             {propsExpanded && (
-              <div className="mt-2 p-4 rounded-xl border border-white/10 bg-white/5 space-y-4">
-                <PropertiesPanel
-                  task={task}
-                  onStatusChange={handleStatusChange}
-                  onPriorityChange={handlePriorityChange}
-                  onAssigneeChange={a => updateTask(taskId, { assignee: a }, `Assigned to ${a}`)}
-                  onDueDateChange={d => updateTask(taskId, { dueDate: d }, `Due date set to ${d}`)}
-                  onCopyLink={handleCopyLink}
-                />
-              </div>
+              <View className="mt-2 p-4 rounded-xl border border-white/10 bg-white/5 gap-4">
+                <PropertiesPanel task={task} onStatusChange={handleStatusChange} onPriorityChange={p => updateTask(taskId, { priority: p }, `Priority changed to ${p}`)} onAssigneeChange={a => updateTask(taskId, { assignee: a }, `Assigned to ${a}`)} onDueDateChange={d => updateTask(taskId, { dueDate: d }, `Due date set to ${d}`)} onCopyLink={handleCopyLink} />
+              </View>
             )}
-          </div>
+          </View>
 
-          {/* Description */}
-          <Textarea
-            label="Description"
-            value={description}
-            onChange={e => { setDescription(e.target.value); scheduleSave({ description: e.target.value }); }}
-            placeholder="Add a description..."
-            rows={4}
-          />
+          <Textarea label="Description" value={description} onChange={e => { setDescription(e.target.value); scheduleSave({ description: e.target.value }); }} placeholder="Add a description..." rows={4} />
 
-          {/* Subtasks */}
-          <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-            <SubtaskList
-              subtasks={task.subtasks}
-              onAdd={t => addSubtask(taskId, t)}
-              onToggle={id => toggleSubtask(taskId, id)}
-              onDelete={id => deleteSubtask(taskId, id)}
-            />
-          </div>
+          <View className="p-4 rounded-xl border border-white/10 bg-white/5">
+            <SubtaskList subtasks={task.subtasks} onAdd={t => addSubtask(taskId, t)} onToggle={id => toggleSubtask(taskId, id)} onDelete={id => deleteSubtask(taskId, id)} />
+          </View>
 
-          {/* File attachments */}
-          <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-            <h3 className="text-sm font-semibold text-white/80 mb-3">Attachments</h3>
-            <FileDropZone
-              attachments={task.attachments}
-              onAdd={a => addAttachment(taskId, a)}
-              onRemove={id => removeAttachment(taskId, id)}
-            />
-          </div>
+          <View className="p-4 rounded-xl border border-white/10 bg-white/5">
+            <Text className="text-sm font-semibold text-white/80 mb-3">Attachments</Text>
+            <FileDropZone attachments={task.attachments} onAdd={a => addAttachment(taskId, a)} onRemove={id => removeAttachment(taskId, id)} />
+          </View>
 
-          {/* Speech notes */}
-          <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-            <SpeechNotes
-              value={notes}
-              onChange={val => { setNotes(val); scheduleSave({ notes: val }); }}
-            />
-          </div>
+          <View className="p-4 rounded-xl border border-white/10 bg-white/5">
+            <SpeechNotes value={notes} onChange={val => { setNotes(val); scheduleSave({ notes: val }); }} />
+          </View>
 
           {/* Comments */}
-          <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-            <h3 className="text-sm font-semibold text-white/80 mb-4">
-              Comments {task.comments.length > 0 && <span className="text-white/30 font-normal">({task.comments.length})</span>}
-            </h3>
-            <div className="space-y-3 mb-4">
+          <View className="p-4 rounded-xl border border-white/10 bg-white/5">
+            <Text className="text-sm font-semibold text-white/80 mb-4">
+              Comments {task.comments.length > 0 && <Text className="text-white/30 font-normal">({task.comments.length})</Text>}
+            </Text>
+            <View className="gap-3 mb-4">
               {task.comments.map(c => (
-                <div key={c.id} className="flex gap-3">
-                  <div className="w-7 h-7 rounded-full bg-indigo-500/40 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                    {c.author[0]}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="text-sm font-medium text-white/80">{c.author}</span>
-                      <span className="text-xs text-white/30">{formatDate(c.createdAt)}</span>
-                    </div>
-                    <p className="text-sm text-white/60 break-words">{c.text}</p>
-                  </div>
-                </div>
+                <View key={c.id} className="flex-row gap-3">
+                  <View className="w-7 h-7 rounded-full bg-indigo-500/40 items-center justify-center flex-shrink-0">
+                    <Text className="text-white text-xs font-bold">{c.author[0]}</Text>
+                  </View>
+                  <View className="flex-1 min-w-0">
+                    <View className="flex-row items-center gap-2 mb-1 flex-wrap">
+                      <Text className="text-sm font-medium text-white/80">{c.author}</Text>
+                      <Text className="text-xs text-white/30">{formatDate(c.createdAt)}</Text>
+                    </View>
+                    <Text className="text-sm text-white/60">{c.text}</Text>
+                  </View>
+                </View>
               ))}
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
+            </View>
+            <View className="flex-row gap-2">
+              <TextInput
                 value={comment}
-                onChange={e => setComment(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') handleAddComment(); }}
+                onChangeText={setComment}
+                onSubmitEditing={handleAddComment}
                 placeholder="Add a comment..."
-                className="flex-1 min-w-0 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-white/30 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="flex-1 min-w-0 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white"
               />
-              <Button size="sm" onClick={handleAddComment} className="flex-shrink-0">Send</Button>
-            </div>
-          </div>
+              <Button size="sm" onPress={handleAddComment} className="flex-shrink-0">Send</Button>
+            </View>
+          </View>
 
           {/* Activity log */}
-          <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-            <h3 className="text-sm font-semibold text-white/80 mb-3">Activity</h3>
-            <div className="space-y-2">
+          <View className="p-4 rounded-xl border border-white/10 bg-white/5">
+            <Text className="text-sm font-semibold text-white/80 mb-3">Activity</Text>
+            <View className="gap-2">
               {[...task.activity].reverse().map(a => (
-                <div key={a.id} className="flex items-start gap-2 text-xs">
-                  <div className="w-1 h-1 rounded-full bg-indigo-400 mt-1.5 flex-shrink-0" />
-                  <span className="text-white/50 flex-1">{a.message}</span>
-                  <span className="text-white/25 whitespace-nowrap">{formatDate(a.createdAt)}</span>
-                </div>
+                <View key={a.id} className="flex-row items-start gap-2">
+                  <View className="w-1 h-1 rounded-full bg-indigo-400 mt-1.5 flex-shrink-0" />
+                  <Text className="text-white/50 flex-1 text-xs">{a.message}</Text>
+                  <Text className="text-white/25 text-xs">{formatDate(a.createdAt)}</Text>
+                </View>
               ))}
-            </div>
-          </div>
-        </div>
+            </View>
+          </View>
+        </View>
 
         {/* Desktop sidebar */}
-        <div className="hidden lg:flex flex-col gap-4">
-          <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-            <Button variant="secondary" size="sm" className="w-full" onClick={handleCopyLink}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
+        <View className="hidden lg:flex flex-col gap-4">
+          <View className="p-4 rounded-xl border border-white/10 bg-white/5">
+            <Button variant="secondary" size="sm" className="w-full" onPress={handleCopyLink}>
+              <Svg size={16} fill="none" stroke="white" viewBox="0 0 24 24">
+                <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </Svg>
               Copy Task Link
             </Button>
-          </div>
+          </View>
 
-          <div className="p-4 rounded-xl border border-white/10 bg-white/5 space-y-4">
-            <PropertiesPanel
-              task={task}
-              onStatusChange={handleStatusChange}
-              onPriorityChange={handlePriorityChange}
-              onAssigneeChange={a => updateTask(taskId, { assignee: a }, `Assigned to ${a}`)}
-              onDueDateChange={d => updateTask(taskId, { dueDate: d }, `Due date set to ${d}`)}
-              onCopyLink={handleCopyLink}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+          <View className="p-4 rounded-xl border border-white/10 bg-white/5 gap-4">
+            <PropertiesPanel task={task} onStatusChange={handleStatusChange} onPriorityChange={p => updateTask(taskId, { priority: p as TaskPriority }, `Priority changed to ${p}`)} onAssigneeChange={a => updateTask(taskId, { assignee: a }, `Assigned to ${a}`)} onDueDateChange={d => updateTask(taskId, { dueDate: d }, `Due date set to ${d}`)} onCopyLink={handleCopyLink} />
+          </View>
+        </View>
+      </View>
+    </View>
   );
 }
 
-// Extracted reusable properties panel
-function PropertiesPanel({ task, onStatusChange, onPriorityChange, onAssigneeChange, onDueDateChange, onCopyLink }: {
+function PropertiesPanel({ task, onStatusChange, onPriorityChange, onAssigneeChange, onDueDateChange }: {
   task: ReturnType<ReturnType<typeof useTasks>['getTask']>;
   onStatusChange: (s: TaskStatus) => void;
   onPriorityChange: (p: TaskPriority) => void;
@@ -302,55 +252,61 @@ function PropertiesPanel({ task, onStatusChange, onPriorityChange, onAssigneeCha
   if (!task) return null;
   return (
     <>
-      <div>
-        <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">Status</label>
-        <div className="flex flex-wrap gap-1.5">
+      <View>
+        <Text className="text-xs text-white/40 uppercase tracking-wider mb-2">Status</Text>
+        <View className="flex-row flex-wrap gap-1.5">
           {STATUSES.map(s => (
-            <button key={s} onClick={() => onStatusChange(s)}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all min-h-[32px] ${task.status === s ? 'bg-indigo-500 text-white' : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'}`}>
-              {s}
-            </button>
+            <Pressable key={s} onPress={() => onStatusChange(s)}
+              className={`px-2.5 py-1.5 rounded-lg transition-all ${task.status === s ? 'bg-indigo-500' : 'bg-white/5'}`}
+              style={{ minHeight: 32 }}>
+              <Text className={`text-xs font-medium ${task.status === s ? 'text-white' : 'text-white/50'}`}>{s}</Text>
+            </Pressable>
           ))}
-        </div>
-      </div>
-      <div>
-        <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">Priority</label>
-        <div className="flex flex-wrap gap-1.5">
+        </View>
+      </View>
+      <View>
+        <Text className="text-xs text-white/40 uppercase tracking-wider mb-2">Priority</Text>
+        <View className="flex-row flex-wrap gap-1.5">
           {PRIORITIES.map(p => (
-            <button key={p} onClick={() => onPriorityChange(p)}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all min-h-[32px] ${task.priority === p ? 'bg-indigo-500 text-white' : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'}`}>
-              {p}
-            </button>
+            <Pressable key={p} onPress={() => onPriorityChange(p)}
+              className={`px-2.5 py-1.5 rounded-lg transition-all ${task.priority === p ? 'bg-indigo-500' : 'bg-white/5'}`}
+              style={{ minHeight: 32 }}>
+              <Text className={`text-xs font-medium ${task.priority === p ? 'text-white' : 'text-white/50'}`}>{p}</Text>
+            </Pressable>
           ))}
-        </div>
-      </div>
-      <div>
-        <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">Assignee</label>
-        <input type="text" defaultValue={task.assignee}
-          onBlur={e => onAssigneeChange(e.target.value)}
+        </View>
+      </View>
+      <View>
+        <Text className="text-xs text-white/40 uppercase tracking-wider mb-2">Assignee</Text>
+        <TextInput
+          defaultValue={task.assignee}
+          onBlur={e => onAssigneeChange((e as any).target?.value ?? task.assignee)}
+          onSubmitEditing={() => {}}
           placeholder="Assign to..."
-          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-white/30 focus:outline-none focus:border-indigo-500 transition-colors" />
-      </div>
-      <div>
-        <label className="text-xs text-white/40 uppercase tracking-wider block mb-2">Due Date</label>
-        <input type="date" value={task.dueDate}
-          onChange={e => onDueDateChange(e.target.value)}
-          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors [color-scheme:dark]" />
-      </div>
-      <div className="pt-2 border-t border-white/5 space-y-1.5">
-        <div className="flex justify-between text-xs">
-          <span className="text-white/30">Created</span>
-          <span className="text-white/50">{formatDate(task.createdAt)}</span>
-        </div>
-        <div className="flex justify-between text-xs">
-          <span className="text-white/30">Updated</span>
-          <span className="text-white/50">{formatDate(task.updatedAt)}</span>
-        </div>
-        <div className="flex justify-between text-xs">
-          <span className="text-white/30">Attachments</span>
-          <span className="text-white/50">{task.attachments.length}</span>
-        </div>
-      </div>
+          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white"
+        />
+      </View>
+      <View>
+        <Text className="text-xs text-white/40 uppercase tracking-wider mb-2">Due Date</Text>
+        <TextInput
+          value={task.dueDate}
+          onChangeText={onDueDateChange}
+          placeholder="YYYY-MM-DD"
+          className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white"
+        />
+      </View>
+      <View className="pt-2 border-t border-white/5 gap-1.5">
+        {[
+          { label: 'Created', value: formatDate(task.createdAt) },
+          { label: 'Updated', value: formatDate(task.updatedAt) },
+          { label: 'Attachments', value: String(task.attachments.length) },
+        ].map(row => (
+          <View key={row.label} className="flex-row justify-between">
+            <Text className="text-xs text-white/30">{row.label}</Text>
+            <Text className="text-xs text-white/50">{row.value}</Text>
+          </View>
+        ))}
+      </View>
     </>
   );
 }

@@ -5,6 +5,9 @@ import { useTasks } from '@/hooks/useTasks';
 import { KanbanBoard } from '@/components/cards/KanbanBoard';
 import { TaskStatus } from '@/types';
 import { Button } from '@/components/ui/Button';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
+import { Pressable } from '@/components/core/Pressable';
 
 export default function ProjectBoardPage() {
   const { id } = useParams<{ id: string }>();
@@ -15,58 +18,54 @@ export default function ProjectBoardPage() {
 
   if (!project) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-white/30">
-        <p className="text-lg mb-4">Project not found</p>
-        <Button variant="ghost" onClick={() => router.navigate('projects')}>← Back to Projects</Button>
-      </div>
+      <View className="items-center justify-center h-64">
+        <Text className="text-lg text-white/30 mb-4">Project not found</Text>
+        <Button variant="ghost" onPress={() => router.navigate('projects')}>← Back to Projects</Button>
+      </View>
     );
   }
 
   return (
-    <div className="flex flex-col h-full gap-4 min-w-0">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2 mb-1 text-sm text-white/40 flex-wrap">
-            <button
-              onClick={() => router.navigate('projects')}
-              className="hover:text-white transition-colors"
-            >
-              Projects
-            </button>
-            <span>/</span>
-            <span className="text-white/70 truncate max-w-[200px] sm:max-w-none">{project.name}</span>
-          </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white truncate" style={{ fontFamily: 'Space Mono, monospace' }}>
+    <View className="flex flex-col h-full gap-4 min-w-0">
+      <View className="flex-row items-start justify-between gap-3 flex-wrap">
+        <View className="min-w-0">
+          <View className="flex-row items-center gap-2 mb-1 flex-wrap">
+            <Pressable onPress={() => router.navigate('projects')}>
+              <Text className="text-sm text-white/40 hover:text-white transition-colors">Projects</Text>
+            </Pressable>
+            <Text className="text-sm text-white/40">/</Text>
+            <Text className="text-sm text-white/70" numberOfLines={1}>{project.name}</Text>
+          </View>
+          <Text className="text-xl font-bold text-white" numberOfLines={1} style={{ fontFamily: 'Space Mono, monospace' }}>
             {project.name}
-          </h1>
+          </Text>
           {project.description && (
-            <p className="text-white/40 text-sm mt-1 line-clamp-2 max-w-xl">{project.description}</p>
+            <Text className="text-white/40 text-sm mt-1" numberOfLines={2}>{project.description}</Text>
           )}
-        </div>
+        </View>
 
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <div className="flex -space-x-2">
+        <View className="flex-row items-center gap-2 flex-shrink-0">
+          <View className="flex-row">
             {project.members.slice(0, 4).map((m, i) => (
-              <div
+              <View
                 key={i}
-                title={m}
-                className="w-8 h-8 rounded-full border-2 border-[#0a0f1e] bg-indigo-500 flex items-center justify-center text-white text-xs font-bold"
+                className="w-8 h-8 rounded-full border-2 border-[#0a0f1e] bg-indigo-500 items-center justify-center"
+                style={{ marginLeft: i > 0 ? -8 : 0 }}
               >
-                {m[0]?.toUpperCase()}
-              </div>
+                <Text className="text-white text-xs font-bold">{m[0]?.toUpperCase()}</Text>
+              </View>
             ))}
             {project.members.length > 4 && (
-              <div className="w-8 h-8 rounded-full border-2 border-[#0a0f1e] bg-white/10 flex items-center justify-center text-white text-xs">
-                +{project.members.length - 4}
-              </div>
+              <View className="w-8 h-8 rounded-full border-2 border-[#0a0f1e] bg-white/10 items-center justify-center" style={{ marginLeft: -8 }}>
+                <Text className="text-white text-xs">+{project.members.length - 4}</Text>
+              </View>
             )}
-          </div>
-          <span className="text-xs text-white/30 hidden sm:block">{tasks.length} tasks</span>
-        </div>
-      </div>
+          </View>
+          <Text className="text-xs text-white/30 hidden sm:block">{tasks.length} tasks</Text>
+        </View>
+      </View>
 
-      {/* Hint for mobile scroll */}
-      <p className="text-xs text-white/20 md:hidden">← Swipe to see all columns →</p>
+      <Text className="text-xs text-white/20 md:hidden">← Swipe to see all columns →</Text>
 
       <KanbanBoard
         tasks={tasks}
@@ -76,6 +75,6 @@ export default function ProjectBoardPage() {
         }
         onAddTask={(title, status) => addTask(id, title, status)}
       />
-    </div>
+    </View>
   );
 }

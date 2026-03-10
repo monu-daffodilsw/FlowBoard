@@ -11,6 +11,11 @@ import { CanvasChart } from '@/components/cards/CanvasChart';
 import { GeoWidget } from '@/components/cards/GeoWidget';
 import { Badge, statusBadge } from '@/components/ui/Badge';
 import { formatDate } from '@/utils/utils';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
+import { Pressable } from '@/components/core/Pressable';
+import { Svg } from '@/components/core/Svg';
+import { Path } from '@/components/core/Path';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -27,9 +32,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const dueTodayTasks = allTasks.filter(t => t.dueDate === today && t.status !== 'Done');
-    dueTodayTasks.forEach(t => {
-      addNotification(`Task due today: "${t.title}"`, true);
-    });
+    dueTodayTasks.forEach(t => { addNotification(`Task due today: "${t.title}"`, true); });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,98 +57,95 @@ export default function DashboardPage() {
   const greeting = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-white" style={{ fontFamily: 'Space Mono, monospace' }}>
+    <View className="gap-4">
+      <View>
+        <Text className="text-xl font-bold text-white" style={{ fontFamily: 'Space Mono, monospace' }}>
           Good {greeting}, {user?.name.split(' ')[0]}
-        </h1>
-        <p className="text-white/40 text-sm mt-1">Here&apos;s what&apos;s happening across your projects</p>
-      </div>
+        </Text>
+        <Text className="text-white/40 text-sm mt-1">Here&apos;s what&apos;s happening across your projects</Text>
+      </View>
 
-      {/* Stats grid — 2 cols on mobile, 4 on large */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <View className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatsCard label="Total Tasks" value={total} color="indigo" icon={
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
+          <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </Svg>
         } />
         <StatsCard label="Completed" value={completed} color="green" icon={
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </Svg>
         } />
         <StatsCard label="In Progress" value={inProgress} color="amber" icon={
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
+          <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </Svg>
         } />
         <StatsCard label="Overdue" value={overdue} color="red" icon={
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </Svg>
         } />
-      </div>
+      </View>
 
-      {/* Clock + Geo */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+      <View className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <ClockWidget />
         <GeoWidget />
-      </div>
+      </View>
 
-      {/* Chart + Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+      <View className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <CanvasChart data={chartData} title="Tasks by Status" />
 
-        <div className="p-4 sm:p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
-          <p className="text-white/40 text-xs uppercase tracking-wider mb-3">Recent Activity</p>
-          <div className="space-y-1">
+        <View className="p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+          <Text className="text-white/40 text-xs uppercase tracking-wider mb-3">Recent Activity</Text>
+          <View className="gap-1">
             {recentActivity.map(task => {
               const proj = projects.find(p => p.id === task.projectId);
               return (
-                <button
+                <Pressable
                   key={task.id}
-                  onClick={() => router.navigate('taskDetail', { id: task.projectId, taskId: task.id })}
-                  className="w-full flex items-center gap-3 text-left hover:bg-white/5 rounded-lg p-2 -mx-2 transition-colors group min-h-[48px]"
+                  onPress={() => router.navigate('taskDetail', { id: task.projectId, taskId: task.id })}
+                  className="flex-row items-center gap-3 hover:bg-white/5 rounded-lg p-2 -mx-2 transition-colors"
+                  style={{ minHeight: 48 }}
                 >
                   <Badge variant={statusBadge(task.status)} className="flex-shrink-0 hidden sm:inline-flex">{task.status}</Badge>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white/80 truncate group-hover:text-white transition-colors">{task.title}</p>
-                    <p className="text-xs text-white/30">{proj?.name} · {formatDate(task.updatedAt)}</p>
-                  </div>
-                  <Badge variant={statusBadge(task.status)} className="flex-shrink-0 sm:hidden">{task.status}</Badge>
-                </button>
+                  <View className="flex-1 min-w-0">
+                    <Text className="text-sm text-white/80" numberOfLines={1}>{task.title}</Text>
+                    <Text className="text-xs text-white/30">{proj?.name} · {formatDate(task.updatedAt)}</Text>
+                  </View>
+                </Pressable>
               );
             })}
             {recentActivity.length === 0 && (
-              <p className="text-white/30 text-sm py-4 text-center">No recent activity</p>
+              <Text className="text-white/30 text-sm py-4 text-center">No recent activity</Text>
             )}
-          </div>
-        </div>
-      </div>
+          </View>
+        </View>
+      </View>
 
-      {/* Mini Kanban preview */}
-      <div className="p-4 sm:p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
-        <p className="text-white/40 text-xs uppercase tracking-wider mb-4">Quick View</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <View className="p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+        <Text className="text-white/40 text-xs uppercase tracking-wider mb-4">Quick View</Text>
+        <View className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {Object.entries(statusGroups).map(([status, tasks]) => (
-            <div key={status}>
-              <p className="text-xs font-medium text-white/50 mb-2">{status} ({tasks.length})</p>
-              <div className="flex flex-wrap gap-1.5">
+            <View key={status}>
+              <Text className="text-xs font-medium text-white/50 mb-2">{status} ({tasks.length})</Text>
+              <View className="flex-row flex-wrap gap-1.5">
                 {tasks.map(t => (
-                  <button
+                  <Pressable
                     key={t.id}
-                    onClick={() => router.navigate('taskDetail', { id: t.projectId, taskId: t.id })}
-                    className="px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white/70 hover:text-white hover:border-indigo-500/40 transition-all truncate max-w-[160px] min-h-[32px]"
+                    onPress={() => router.navigate('taskDetail', { id: t.projectId, taskId: t.id })}
+                    className="px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-indigo-500/40 transition-all"
+                    style={{ minHeight: 32, maxWidth: 160 }}
                   >
-                    {t.title}
-                  </button>
+                    <Text className="text-xs text-white/70" numberOfLines={1}>{t.title}</Text>
+                  </Pressable>
                 ))}
-                {tasks.length === 0 && <span className="text-xs text-white/20 italic">None</span>}
-              </div>
-            </div>
+                {tasks.length === 0 && <Text className="text-xs text-white/20 italic">None</Text>}
+              </View>
+            </View>
           ))}
-        </div>
-      </div>
-    </div>
+        </View>
+      </View>
+    </View>
   );
 }

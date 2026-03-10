@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "FlowBoard",
+    "slug": "flowboard",
+    "version": "1.0.0",
+    "scheme": "flowboard",
+    "platforms": ["ios", "android"],
+    "orientation": "portrait",
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,5 +1,4 @@
 export { RouterProvider } from './context';
-export { AppRouter } from './AppRouter';
 export { useRouter, usePathname, useParams } from './hooks';
 export { Link } from './Link';
 export { buildPath, matchPath } from './routes';

@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
 import { cn } from '@/utils/utils';
 
 interface StatsCardProps {
@@ -25,20 +27,19 @@ const iconBg = {
 
 export function StatsCard({ label, value, icon, color, className }: StatsCardProps) {
   return (
-    <div className={cn(
-      'relative p-4 sm:p-5 rounded-xl border bg-gradient-to-br backdrop-blur-sm overflow-hidden',
-      colorMap[color],
-      className
+    <View className={cn(
+      'relative p-4 rounded-xl border bg-gradient-to-br backdrop-blur-sm overflow-hidden',
+      colorMap[color], className
     )}>
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-white/50 text-[10px] sm:text-xs font-medium uppercase tracking-wider mb-1 truncate">{label}</p>
-          <p className="text-2xl sm:text-3xl font-bold text-white">{value}</p>
-        </div>
-        <div className={cn('p-2 sm:p-2.5 rounded-xl flex-shrink-0', iconBg[color])}>
+      <View className="flex-row items-start justify-between gap-2">
+        <View className="min-w-0">
+          <Text className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">{label}</Text>
+          <Text className="text-2xl font-bold text-white">{value}</Text>
+        </View>
+        <View className={cn('p-2 rounded-xl flex-shrink-0', iconBg[color])}>
           {icon}
-        </div>
-      </div>
-    </div>
+        </View>
+      </View>
+    </View>
   );
 }

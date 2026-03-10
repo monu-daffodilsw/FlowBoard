@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Text } from '@/components/core/Text';
 import { cn } from '@/utils/utils';
 
 type BadgeVariant = 'default' | 'indigo' | 'green' | 'amber' | 'red' | 'blue';
@@ -20,28 +21,18 @@ const variants: Record<BadgeVariant, string> = {
 
 export function Badge({ variant = 'default', children, className }: BadgeProps) {
   return (
-    <span className={cn('inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium', variants[variant], className)}>
+    <Text className={cn('inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium', variants[variant], className)}>
       {children}
-    </span>
+    </Text>
   );
 }
 
-export function priorityBadge(priority: string) {
-  const map: Record<string, BadgeVariant> = {
-    Low: 'green',
-    Medium: 'blue',
-    High: 'amber',
-    Critical: 'red',
-  };
+export function priorityBadge(priority: string): BadgeVariant {
+  const map: Record<string, BadgeVariant> = { Low: 'green', Medium: 'blue', High: 'amber', Critical: 'red' };
   return map[priority] ?? 'default';
 }
 
-export function statusBadge(status: string) {
-  const map: Record<string, BadgeVariant> = {
-    Backlog: 'default',
-    'In Progress': 'indigo',
-    'In Review': 'amber',
-    Done: 'green',
-  };
+export function statusBadge(status: string): BadgeVariant {
+  const map: Record<string, BadgeVariant> = { Backlog: 'default', 'In Progress': 'indigo', 'In Review': 'amber', Done: 'green' };
   return map[status] ?? 'default';
 }

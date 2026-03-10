@@ -6,6 +6,9 @@ import { useProjects } from '@/hooks/useProjects';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { Input, Textarea } from '@/components/ui/Input';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
+import { Pressable } from '@/components/core/Pressable';
 
 const AVATAR_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899'];
 
@@ -35,77 +38,64 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-xl sm:text-2xl font-bold text-white mb-5 sm:mb-6" style={{ fontFamily: 'Space Mono, monospace' }}>Profile</h1>
+    <View className="max-w-2xl">
+      <Text className="text-xl font-bold text-white mb-5" style={{ fontFamily: 'Space Mono, monospace' }}>Profile</Text>
 
-      <div className="p-4 sm:p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm mb-4">
-        <div className="flex items-start gap-4 sm:gap-5">
-          <div className="flex flex-col items-center gap-2 flex-shrink-0">
+      <View className="p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm mb-4">
+        <View className="flex-row items-start gap-4">
+          <View className="items-center gap-2 flex-shrink-0">
             <Avatar name={user.name} color={user.avatarColor} size="lg" />
             {editing && (
-              <div className="flex gap-1.5 flex-wrap justify-center max-w-[88px]">
+              <View className="flex-row flex-wrap justify-center gap-1.5" style={{ maxWidth: 88 }}>
                 {AVATAR_COLORS.map(c => (
-                  <button
+                  <Pressable
                     key={c}
-                    onClick={() => updateUser({ avatarColor: c })}
+                    onPress={() => updateUser({ avatarColor: c })}
                     className={`w-6 h-6 rounded-full border-2 transition-all ${user.avatarColor === c ? 'border-white scale-110' : 'border-transparent'}`}
                     style={{ backgroundColor: c }}
-                    aria-label={`Set avatar color to ${c}`}
                   />
                 ))}
-              </div>
+              </View>
             )}
-          </div>
+          </View>
 
-          <div className="flex-1 min-w-0">
+          <View className="flex-1 min-w-0">
             {editing ? (
-              <div className="space-y-3">
-                <Input
-                  label="Display Name"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="Your name"
-                />
-                <Textarea
-                  label="Bio"
-                  value={bio}
-                  onChange={e => setBio(e.target.value)}
-                  placeholder="Tell us about yourself..."
-                  rows={3}
-                />
-                <div className="flex gap-2 flex-wrap">
-                  <Button size="sm" onClick={handleSave}>Save Changes</Button>
-                  <Button size="sm" variant="ghost" onClick={() => { setEditing(false); setName(user.name); setBio(user.bio); }}>Cancel</Button>
-                </div>
-              </div>
+              <View className="gap-3">
+                <Input label="Display Name" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" />
+                <Textarea label="Bio" value={bio} onChange={e => setBio(e.target.value)} placeholder="Tell us about yourself..." rows={3} />
+                <View className="flex-row gap-2 flex-wrap">
+                  <Button size="sm" onPress={handleSave}>Save Changes</Button>
+                  <Button size="sm" variant="ghost" onPress={() => { setEditing(false); setName(user.name); setBio(user.bio); }}>Cancel</Button>
+                </View>
+              </View>
             ) : (
-              <div>
-                <div className="flex items-start justify-between gap-2 mb-1">
-                  <h2 className="text-lg sm:text-xl font-bold text-white truncate">{user.name}</h2>
-                  <Button size="sm" variant="ghost" onClick={() => setEditing(true)} className="flex-shrink-0">Edit</Button>
-                </div>
-                <p className="text-sm text-white/50 mb-2 truncate">{user.email}</p>
-                <p className="text-sm text-white/60 break-words">{user.bio || <span className="text-white/20 italic">No bio yet</span>}</p>
-                {saved && <p className="text-xs text-emerald-400 mt-2">✓ Changes saved</p>}
-              </div>
+              <View>
+                <View className="flex-row items-start justify-between gap-2 mb-1">
+                  <Text className="text-lg font-bold text-white" numberOfLines={1}>{user.name}</Text>
+                  <Button size="sm" variant="ghost" onPress={() => setEditing(true)} className="flex-shrink-0">Edit</Button>
+                </View>
+                <Text className="text-sm text-white/50 mb-2" numberOfLines={1}>{user.email}</Text>
+                <Text className="text-sm text-white/60">{user.bio || <Text className="text-white/20 italic">No bio yet</Text>}</Text>
+                {saved && <Text className="text-xs text-emerald-400 mt-2">✓ Changes saved</Text>}
+              </View>
             )}
-          </div>
-        </div>
-      </div>
+          </View>
+        </View>
+      </View>
 
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+      <View className="grid grid-cols-3 gap-3">
         {[
           { label: 'Projects', value: projects.length, color: 'text-indigo-400' },
           { label: 'Completed', value: completed, color: 'text-emerald-400' },
           { label: 'In Progress', value: inProgress, color: 'text-amber-400' },
         ].map(stat => (
-          <div key={stat.label} className="p-3 sm:p-4 rounded-xl border border-white/10 bg-white/5 text-center">
-            <p className={`text-2xl sm:text-3xl font-bold ${stat.color}`}>{stat.value}</p>
-            <p className="text-xs text-white/40 mt-1">{stat.label}</p>
-          </div>
+          <View key={stat.label} className="p-3 rounded-xl border border-white/10 bg-white/5 items-center">
+            <Text className={`text-2xl font-bold ${stat.color}`}>{stat.value}</Text>
+            <Text className="text-xs text-white/40 mt-1">{stat.label}</Text>
+          </View>
         ))}
-      </div>
-    </div>
+      </View>
+    </View>
   );
 }

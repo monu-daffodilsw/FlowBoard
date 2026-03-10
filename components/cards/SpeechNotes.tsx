@@ -2,6 +2,8 @@
 import { useSpeech } from '@/hooks/useSpeech';
 import { Textarea } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
 
 interface SpeechNotesProps {
   value: string;
@@ -14,39 +16,26 @@ export function SpeechNotes({ value, onChange }: SpeechNotesProps) {
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-white/80">Notes</h3>
-        <div className="flex items-center gap-2">
+    <View>
+      <View className="flex-row items-center justify-between mb-2">
+        <Text className="text-sm font-semibold text-white/80">Notes</Text>
+        <View className="flex-row items-center gap-2">
           {supported === false && (
-            <span className="text-xs text-amber-400">Speech not supported</span>
+            <Text className="text-xs text-amber-400">Speech not supported</Text>
           )}
-          <Button
-            size="sm"
-            variant={isRecording ? 'danger' : 'ghost'}
-            onClick={isRecording ? stop : start}
-            className={isRecording ? 'relative' : ''}
-          >
-            {isRecording && (
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            )}
+          <Button size="sm" variant={isRecording ? 'danger' : 'ghost'} onPress={isRecording ? stop : start}>
             {isRecording ? '⏹ Stop Recording' : '🎤 Start Recording'}
           </Button>
-        </div>
-      </div>
+        </View>
+      </View>
 
       {isRecording && interim && (
-        <div className="mb-2 p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-sm text-indigo-300/70 italic">
-          {interim}
-        </div>
+        <View className="mb-2 p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
+          <Text className="text-sm text-indigo-300/70 italic">{interim}</Text>
+        </View>
       )}
 
-      <Textarea
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        placeholder="Add notes..."
-        rows={4}
-      />
-    </div>
+      <Textarea value={value} onChange={e => onChange(e.target.value)} placeholder="Add notes..." rows={4} />
+    </View>
   );
 }

@@ -2,6 +2,12 @@
 import { useState } from 'react';
 import { Subtask } from '@/types';
 import { Button } from '@/components/ui/Button';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
+import { Pressable } from '@/components/core/Pressable';
+import { TextInput } from '@/components/core/TextInput';
+import { Svg } from '@/components/core/Svg';
+import { Path } from '@/components/core/Path';
 
 interface SubtaskListProps {
   subtasks: Subtask[];
@@ -16,69 +22,60 @@ export function SubtaskList({ subtasks, onAdd, onToggle, onDelete }: SubtaskList
   const done = subtasks.filter(s => s.done).length;
 
   return (
-    <div>
-      <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <h3 className="text-sm font-semibold text-white/80">Subtasks</h3>
-        <span className="text-xs text-white/40">{done}/{subtasks.length}</span>
+    <View>
+      <View className="flex-row items-center gap-2 mb-3 flex-wrap">
+        <Text className="text-sm font-semibold text-white/80">Subtasks</Text>
+        <Text className="text-xs text-white/40">{done}/{subtasks.length}</Text>
         {subtasks.length > 0 && (
-          <div className="flex-1 min-w-[60px] h-1.5 bg-white/10 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-emerald-500 rounded-full transition-all duration-300"
+          <View className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden" style={{ minWidth: 60 }}>
+            <View
+              className="h-full bg-emerald-500 rounded-full"
               style={{ width: subtasks.length ? `${(done / subtasks.length) * 100}%` : '0%' }}
             />
-          </div>
+          </View>
         )}
-        <Button size="sm" variant="ghost" onClick={() => setAdding(true)} className="ml-auto">+ Add</Button>
-      </div>
+        <Button size="sm" variant="ghost" onPress={() => setAdding(true)} className="ml-auto">+ Add</Button>
+      </View>
 
-      <div className="space-y-1">
+      <View className="gap-1">
         {subtasks.map(s => (
-          <div key={s.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 group min-h-[44px]">
-            <button
-              onClick={() => onToggle(s.id)}
-              className={`w-5 h-5 rounded border flex-shrink-0 flex items-center justify-center transition-colors ${
-                s.done ? 'bg-emerald-500 border-emerald-500' : 'border-white/20 hover:border-emerald-500/50'
+          <View key={s.id} className="flex-row items-center gap-3 p-2 rounded-lg hover:bg-white/5" style={{ minHeight: 44 }}>
+            <Pressable
+              onPress={() => onToggle(s.id)}
+              className={`w-5 h-5 rounded border flex-shrink-0 items-center justify-center ${
+                s.done ? 'bg-emerald-500 border-emerald-500' : 'border-white/20'
               }`}
-              aria-label={s.done ? 'Mark incomplete' : 'Mark complete'}
             >
               {s.done && (
-                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                </svg>
+                <Svg size={12} fill="none" stroke="white" viewBox="0 0 24 24">
+                  <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </Svg>
               )}
-            </button>
-            <span className={`text-sm flex-1 ${s.done ? 'line-through text-white/30' : 'text-white/80'}`}>{s.title}</span>
-            <button
-              onClick={() => onDelete(s.id)}
-              className="opacity-0 group-hover:opacity-100 p-2 rounded text-white/30 hover:text-red-400 transition-all flex-shrink-0"
-              aria-label="Delete subtask"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+            </Pressable>
+            <Text className={`text-sm flex-1 ${s.done ? 'line-through text-white/30' : 'text-white/80'}`}>{s.title}</Text>
+            <Pressable onPress={() => onDelete(s.id)} className="p-2 rounded">
+              <Svg size={14} fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24">
+                <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </Svg>
+            </Pressable>
+          </View>
         ))}
 
         {adding && (
-          <div className="flex items-center gap-2 p-2 min-h-[44px]">
-            <input
+          <View className="flex-row items-center gap-2 p-2" style={{ minHeight: 44 }}>
+            <TextInput
               autoFocus
-              type="text"
               value={newTitle}
-              onChange={e => setNewTitle(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' && newTitle.trim()) { onAdd(newTitle.trim()); setNewTitle(''); setAdding(false); }
-                if (e.key === 'Escape') { setAdding(false); setNewTitle(''); }
-              }}
+              onChangeText={setNewTitle}
+              onSubmitEditing={() => { if (newTitle.trim()) { onAdd(newTitle.trim()); setNewTitle(''); setAdding(false); } }}
               placeholder="Subtask title..."
-              className="flex-1 bg-transparent text-sm text-white placeholder-white/30 focus:outline-none border-b border-white/20 pb-1 min-w-0"
+              className="flex-1 bg-transparent text-sm text-white placeholder-white/30 border-b border-white/20 pb-1"
             />
-            <Button size="sm" onClick={() => { if (newTitle.trim()) { onAdd(newTitle.trim()); setNewTitle(''); setAdding(false); } }}>Add</Button>
-            <Button size="sm" variant="ghost" onClick={() => { setAdding(false); setNewTitle(''); }}>✕</Button>
-          </div>
+            <Button size="sm" onPress={() => { if (newTitle.trim()) { onAdd(newTitle.trim()); setNewTitle(''); setAdding(false); } }}>Add</Button>
+            <Button size="sm" variant="ghost" onPress={() => { setAdding(false); setNewTitle(''); }}>✕</Button>
+          </View>
         )}
-      </div>
-    </div>
+      </View>
+    </View>
   );
 }

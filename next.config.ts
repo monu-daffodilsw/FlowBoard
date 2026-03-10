@@ -1,17 +1,23 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /**
-   * No special extension config needed.
-   *
-   * Platform split works via file naming alone:
-   *   Component.tsx         → web (Next.js picks this, it's just a normal file)
-   *   Component.native.tsx  → native (Expo Metro prefers .native.tsx over .tsx)
-   *
-   * Next.js never sees .native.tsx files — they're excluded from tsconfig too.
-   * Only create a .native.tsx when the .tsx imports something that breaks on native
-   * (e.g. 'react-native', window, document, navigator.geolocation).
-   */
+  // Turbopack (default in Next.js 16) — empty config silences the "no turbopack
+  // config" warning while webpack rules also remain available for webpack builds.
+  turbopack: {
+    // Prefer .web.ts(x) over .ts(x) when both exist, so Turbopack never picks
+    // up .native.ts(x) variants that have no corresponding .web. file.
+    resolveExtensions: [
+      '.web.tsx',
+      '.web.ts',
+      '.web.jsx',
+      '.web.js',
+      '.tsx',
+      '.ts',
+      '.jsx',
+      '.js',
+      '.json',
+    ],
+  },
 };
 
 export default nextConfig;

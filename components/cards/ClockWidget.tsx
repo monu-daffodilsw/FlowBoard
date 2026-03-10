@@ -1,5 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { View } from '@/components/core/View';
+import { Text } from '@/components/core/Text';
 
 export function ClockWidget() {
   const [time, setTime] = useState('');
@@ -17,12 +19,12 @@ export function ClockWidget() {
   }, []);
 
   return (
-    <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
-      <p className="text-white/40 text-xs uppercase tracking-wider mb-2">Current Time</p>
-      <p className="text-3xl font-bold text-white tabular-nums" style={{ fontFamily: 'Space Mono, monospace' }}>
+    <View className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+      <Text className="text-white/40 text-xs uppercase tracking-wider mb-2">Current Time</Text>
+      <Text className="text-3xl font-bold text-white tabular-nums" style={{ fontFamily: 'Space Mono, monospace' }}>
         {time || '--:--:--'}
-      </p>
-      <p className="text-white/50 text-sm mt-1">{date}</p>
-    </div>
+      </Text>
+      <Text className="text-white/50 text-sm mt-1">{date}</Text>
+    </View>
   );
 }
