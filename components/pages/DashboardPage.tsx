@@ -33,7 +33,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const dueTodayTasks = allTasks.filter(t => t.dueDate === today && t.status !== 'Done');
     dueTodayTasks.forEach(t => { addNotification(`Task due today: "${t.title}"`, true); });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const chartData = [
@@ -57,7 +57,9 @@ export default function DashboardPage() {
   const greeting = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
 
   return (
-    <View className="gap-4">
+    <View style={{ gap: 16 }}>
+
+      {/* Greeting */}
       <View>
         <Text className="text-xl font-bold text-white" style={{ fontFamily: 'Space Mono, monospace' }}>
           Good {greeting}, {user?.name.split(' ')[0]}
@@ -65,40 +67,57 @@ export default function DashboardPage() {
         <Text className="text-white/40 text-sm mt-1">Here&apos;s what&apos;s happening across your projects</Text>
       </View>
 
-      <View className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatsCard label="Total Tasks" value={total} color="indigo" icon={
-          <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </Svg>
-        } />
-        <StatsCard label="Completed" value={completed} color="green" icon={
-          <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </Svg>
-        } />
-        <StatsCard label="In Progress" value={inProgress} color="amber" icon={
-          <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </Svg>
-        } />
-        <StatsCard label="Overdue" value={overdue} color="red" icon={
-          <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </Svg>
-        } />
+      {/* Stats — 2-column flex wrap (works on web + native) */}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+        <View style={{ width: '48%' }}>
+          <StatsCard label="Total Tasks" value={total} color="indigo" icon={
+            <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </Svg>
+          } />
+        </View>
+        <View style={{ width: '48%' }}>
+          <StatsCard label="Completed" value={completed} color="green" icon={
+            <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </Svg>
+          } />
+        </View>
+        <View style={{ width: '48%' }}>
+          <StatsCard label="In Progress" value={inProgress} color="amber" icon={
+            <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </Svg>
+          } />
+        </View>
+        <View style={{ width: '48%' }}>
+          <StatsCard label="Overdue" value={overdue} color="red" icon={
+            <Svg size={20} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <Path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </Svg>
+          } />
+        </View>
       </View>
 
-      <View className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <ClockWidget />
-        <GeoWidget />
+      {/* Widgets — flex wrap (2 cols on wide, 1 col on narrow) */}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+        <View style={{ flex: 1, minWidth: 240 }}>
+          <ClockWidget />
+        </View>
+        <View style={{ flex: 1, minWidth: 240 }}>
+          <GeoWidget />
+        </View>
       </View>
 
-      <View className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        <CanvasChart data={chartData} title="Tasks by Status" />
+      {/* Chart + Activity — stack on narrow, side-by-side on wide */}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+        <View style={{ flex: 1, minWidth: 260 }}>
+          <CanvasChart data={chartData} title="Tasks by Status" />
+        </View>
 
-        <View className="p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+        <View className="p-4 rounded-xl border border-white/10 bg-white/5" style={{ flex: 1, minWidth: 260 }}>
           <Text className="text-white/40 text-xs uppercase tracking-wider mb-3">Recent Activity</Text>
-          <View className="gap-1">
+          <View style={{ gap: 4 }}>
             {recentActivity.map(task => {
               const proj = projects.find(p => p.id === task.projectId);
               return (
@@ -108,8 +127,8 @@ export default function DashboardPage() {
                   className="flex-row items-center gap-3 hover:bg-white/5 rounded-lg p-2 -mx-2 transition-colors"
                   style={{ minHeight: 48 }}
                 >
-                  <Badge variant={statusBadge(task.status)} className="flex-shrink-0 hidden sm:inline-flex">{task.status}</Badge>
-                  <View className="flex-1 min-w-0">
+                  <Badge variant={statusBadge(task.status)} className="flex-shrink-0">{task.status}</Badge>
+                  <View style={{ flex: 1 }}>
                     <Text className="text-sm text-white/80" numberOfLines={1}>{task.title}</Text>
                     <Text className="text-xs text-white/30">{proj?.name} · {formatDate(task.updatedAt)}</Text>
                   </View>
@@ -123,13 +142,14 @@ export default function DashboardPage() {
         </View>
       </View>
 
-      <View className="p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+      {/* Quick View */}
+      <View className="p-4 rounded-xl border border-white/10 bg-white/5">
         <Text className="text-white/40 text-xs uppercase tracking-wider mb-4">Quick View</Text>
-        <View className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
           {Object.entries(statusGroups).map(([status, tasks]) => (
-            <View key={status}>
+            <View key={status} style={{ flex: 1, minWidth: 120 }}>
               <Text className="text-xs font-medium text-white/50 mb-2">{status} ({tasks.length})</Text>
-              <View className="flex-row flex-wrap gap-1.5">
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
                 {tasks.map(t => (
                   <Pressable
                     key={t.id}
@@ -146,6 +166,7 @@ export default function DashboardPage() {
           ))}
         </View>
       </View>
+
     </View>
   );
 }
