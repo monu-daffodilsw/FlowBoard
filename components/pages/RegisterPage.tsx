@@ -37,7 +37,7 @@ export default function RegisterPage() {
     if (!validate()) return;
     setSubmitting(true);
     await new Promise(r => setTimeout(r, 300));
-    const ok = register(name, email, password);
+    const ok = await register(name, email, password);
     if (ok) router.navigate('dashboard');
     setSubmitting(false);
   };

@@ -27,7 +27,7 @@ export function Navbar({ user, notifications, unreadCount, onMarkAllRead, onMenu
   const { logout } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => { logout(); router.navigate('login'); };
+  const handleLogout = async () => { await logout(); router.navigate('login'); };
 
   return (
     <View className="h-14 flex-row items-center gap-2 px-3 bg-[#080d1a] border-b border-white/5 flex-shrink-0">

@@ -36,7 +36,7 @@ export default function LoginPage() {
     if (!validate()) return;
     setSubmitting(true);
     await new Promise(r => setTimeout(r, 300));
-    const ok = login(email, password);
+    const ok = await login(email, password);
     if (ok) router.navigate('dashboard');
     setSubmitting(false);
   };

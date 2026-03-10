@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { User } from '@/types';
-import { lsGet, lsSet, lsRemove, LS_KEYS } from '@/services/localStorage';
+import { storageGet, storageSet, storageRemove, LS_KEYS } from '@/services/storage';
 import { generateId } from '@/utils/utils';
 
 export function useAuth() {
@@ -9,14 +9,15 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = lsGet<User>(LS_KEYS.USER);
-    setUser(stored);
-    setLoading(false);
+    (async () => {
+      const stored = await storageGet<User>(LS_KEYS.USER);
+      setUser(stored);
+      setLoading(false);
+    })();
   }, []);
 
-  const login = useCallback((email: string, _password: string): boolean => {
-    // Mock auth: accept any email/password, create user if not exists
-    const existing = lsGet<User>(LS_KEYS.USER);
+  const login = useCallback(async (email: string, _password: string): Promise<boolean> => {
+    const existing = await storageGet<User>(LS_KEYS.USER);
     if (existing && existing.email === email) {
       setUser(existing);
       return true;
@@ -30,12 +31,12 @@ export function useAuth() {
       avatarColor: colors[Math.floor(Math.random() * colors.length)],
       createdAt: new Date().toISOString(),
     };
-    lsSet(LS_KEYS.USER, newUser);
+    await storageSet(LS_KEYS.USER, newUser);
     setUser(newUser);
     return true;
   }, []);
 
-  const register = useCallback((name: string, email: string, _password: string): boolean => {
+  const register = useCallback(async (name: string, email: string, _password: string): Promise<boolean> => {
     const colors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6'];
     const newUser: User = {
       id: generateId(),
@@ -45,23 +46,22 @@ export function useAuth() {
       avatarColor: colors[Math.floor(Math.random() * colors.length)],
       createdAt: new Date().toISOString(),
     };
-    lsSet(LS_KEYS.USER, newUser);
+    await storageSet(LS_KEYS.USER, newUser);
     setUser(newUser);
     return true;
   }, []);
 
-  const logout = useCallback(() => {
-    lsRemove(LS_KEYS.USER);
+  const logout = useCallback(async () => {
+    await storageRemove(LS_KEYS.USER);
     setUser(null);
   }, []);
 
-  const updateUser = useCallback((updates: Partial<User>) => {
-    setUser(prev => {
-      if (!prev) return prev;
-      const updated = { ...prev, ...updates };
-      lsSet(LS_KEYS.USER, updated);
-      return updated;
-    });
+  const updateUser = useCallback(async (updates: Partial<User>) => {
+    const current = await storageGet<User>(LS_KEYS.USER);
+    if (!current) return;
+    const updated = { ...current, ...updates };
+    await storageSet(LS_KEYS.USER, updated);
+    setUser(updated);
   }, []);
 
   return { user, loading, login, register, logout, updateUser };
