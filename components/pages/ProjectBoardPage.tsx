@@ -1,14 +1,13 @@
 'use client';
-import { use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from '@/router';
 import { useProjects } from '@/hooks/useProjects';
 import { useTasks } from '@/hooks/useTasks';
 import { KanbanBoard } from '@/components/cards/KanbanBoard';
 import { TaskStatus } from '@/types';
 import { Button } from '@/components/ui/Button';
 
-export default function ProjectBoardPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function ProjectBoardPage() {
+  const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { getProject } = useProjects();
   const { tasks, addTask, updateTask } = useTasks(id);
@@ -18,7 +17,7 @@ export default function ProjectBoardPage({ params }: { params: Promise<{ id: str
     return (
       <div className="flex flex-col items-center justify-center h-64 text-white/30">
         <p className="text-lg mb-4">Project not found</p>
-        <Button variant="ghost" onClick={() => router.push('/projects')}>← Back to Projects</Button>
+        <Button variant="ghost" onClick={() => router.navigate('projects')}>← Back to Projects</Button>
       </div>
     );
   }
@@ -29,7 +28,7 @@ export default function ProjectBoardPage({ params }: { params: Promise<{ id: str
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-1 text-sm text-white/40 flex-wrap">
             <button
-              onClick={() => router.push('/projects')}
+              onClick={() => router.navigate('projects')}
               className="hover:text-white transition-colors"
             >
               Projects

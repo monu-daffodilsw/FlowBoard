@@ -1,5 +1,5 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/router';
 import { Task } from '@/types';
 import { Badge, priorityBadge } from '@/components/ui/Badge';
 import { formatDate } from '@/utils/utils';
@@ -20,7 +20,7 @@ export function TaskCard({ task, projectId, onDragStart }: TaskCardProps) {
     <div
       draggable
       onDragStart={() => onDragStart(task.id)}
-      onClick={() => router.push(`/projects/${projectId}/tasks/${task.id}`)}
+      onClick={() => router.navigate('taskDetail', { id: projectId, taskId: task.id })}
       className="p-3 rounded-lg bg-white/5 border border-white/10 hover:border-indigo-500/40 hover:bg-white/8 cursor-pointer transition-all duration-200 group active:scale-[0.98] touch-manipulation"
     >
       <div className="flex items-start justify-between gap-2 mb-2">

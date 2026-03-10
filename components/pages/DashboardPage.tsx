@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/router';
 import { useAuth } from '@/hooks/useAuth';
 import { useTasks } from '@/hooks/useTasks';
 import { useProjects } from '@/hooks/useProjects';
@@ -104,7 +104,7 @@ export default function DashboardPage() {
               return (
                 <button
                   key={task.id}
-                  onClick={() => router.push(`/projects/${task.projectId}/tasks/${task.id}`)}
+                  onClick={() => router.navigate('taskDetail', { id: task.projectId, taskId: task.id })}
                   className="w-full flex items-center gap-3 text-left hover:bg-white/5 rounded-lg p-2 -mx-2 transition-colors group min-h-[48px]"
                 >
                   <Badge variant={statusBadge(task.status)} className="flex-shrink-0 hidden sm:inline-flex">{task.status}</Badge>
@@ -134,7 +134,7 @@ export default function DashboardPage() {
                 {tasks.map(t => (
                   <button
                     key={t.id}
-                    onClick={() => router.push(`/projects/${t.projectId}/tasks/${t.id}`)}
+                    onClick={() => router.navigate('taskDetail', { id: t.projectId, taskId: t.id })}
                     className="px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white/70 hover:text-white hover:border-indigo-500/40 transition-all truncate max-w-[160px] min-h-[32px]"
                   >
                     {t.title}

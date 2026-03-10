@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useRouter, Link } from '@/router';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -16,7 +15,7 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) router.replace('/dashboard');
+    if (!loading && user) router.replace('dashboard');
   }, [user, loading, router]);
 
   const validate = () => {
@@ -35,7 +34,7 @@ export default function LoginPage() {
     setSubmitting(true);
     await new Promise(r => setTimeout(r, 300)); // simulate async
     const ok = login(email, password);
-    if (ok) router.push('/dashboard');
+    if (ok) router.navigate('dashboard');
     setSubmitting(false);
   };
 
@@ -107,7 +106,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-white/40 mt-6">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+            <Link to="register" className="text-indigo-400 hover:text-indigo-300 transition-colors">
               Create one
             </Link>
           </p>

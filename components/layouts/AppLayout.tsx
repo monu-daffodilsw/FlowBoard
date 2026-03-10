@@ -1,17 +1,17 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, Link, type RouteName } from '@/router';
 import { Sidebar } from '@/components/layouts/Sidebar';
 import { Navbar } from '@/components/layouts/Navbar';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
-import Link from 'next/link';
 import { cn } from '@/utils/utils';
 
-const bottomNavItems = [
+const bottomNavItems: { route: RouteName; path: string; label: string; icon: React.ReactNode }[] = [
   {
-    href: '/dashboard',
+    route: 'dashboard',
+    path: '/dashboard',
     label: 'Home',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,7 +20,8 @@ const bottomNavItems = [
     ),
   },
   {
-    href: '/projects',
+    route: 'projects',
+    path: '/projects',
     label: 'Projects',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,7 +30,8 @@ const bottomNavItems = [
     ),
   },
   {
-    href: '/profile',
+    route: 'profile',
+    path: '/profile',
     label: 'Profile',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +40,8 @@ const bottomNavItems = [
     ),
   },
   {
-    href: '/settings',
+    route: 'settings',
+    path: '/settings',
     label: 'Settings',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +65,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!loading && !user) router.replace('/login');
+    if (!loading && !user) router.replace('login');
   }, [user, loading, router]);
 
   useEffect(() => {
@@ -126,11 +129,11 @@ export function AppLayout({ children }: AppLayoutProps) {
         {/* Mobile bottom navigation */}
         <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#080d1a] border-t border-white/10 flex">
           {bottomNavItems.map(item => {
-            const active = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
+            const active = pathname === item.path || (item.path !== '/dashboard' && pathname.startsWith(item.path));
             return (
               <Link
-                key={item.href}
-                href={item.href}
+                key={item.route}
+                to={item.route}
                 className={cn(
                   'flex-1 flex flex-col items-center gap-1 py-2.5 text-xs font-medium transition-colors',
                   active ? 'text-indigo-400' : 'text-white/40 hover:text-white/70'

@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/router';
 import { useProjects } from '@/hooks/useProjects';
 import { useTasks } from '@/hooks/useTasks';
 import { Button } from '@/components/ui/Button';
@@ -67,7 +67,7 @@ export default function ProjectsPage() {
           return (
             <button
               key={project.id}
-              onClick={() => router.push(`/projects/${project.id}`)}
+              onClick={() => router.navigate('projectBoard', { id: project.id })}
               className="text-left p-4 sm:p-5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/8 hover:border-indigo-500/30 backdrop-blur-sm transition-all duration-200 group active:scale-[0.99] touch-manipulation"
             >
               <div className="flex items-start justify-between mb-3 gap-3">

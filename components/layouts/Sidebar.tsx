@@ -1,6 +1,5 @@
 'use client';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, usePathname, type RouteName } from '@/router';
 import { cn } from '@/utils/utils';
 
 interface SidebarProps {
@@ -9,9 +8,10 @@ interface SidebarProps {
   mobileClose?: () => void;
 }
 
-const navItems = [
+const navItems: { route: RouteName; path: string; label: string; icon: React.ReactNode }[] = [
   {
-    href: '/dashboard',
+    route: 'dashboard',
+    path: '/dashboard',
     label: 'Dashboard',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,7 +20,8 @@ const navItems = [
     ),
   },
   {
-    href: '/projects',
+    route: 'projects',
+    path: '/projects',
     label: 'Projects',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,7 +30,8 @@ const navItems = [
     ),
   },
   {
-    href: '/profile',
+    route: 'profile',
+    path: '/profile',
     label: 'Profile',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +40,8 @@ const navItems = [
     ),
   },
   {
-    href: '/settings',
+    route: 'settings',
+    path: '/settings',
     label: 'Settings',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,11 +88,11 @@ export function Sidebar({ collapsed, onToggle, mobileClose }: SidebarProps) {
       {/* Nav */}
       <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
         {navItems.map(item => {
-          const active = pathname === item.href || pathname.startsWith(item.href + '/');
+          const active = pathname === item.path || pathname.startsWith(item.path + '/');
           return (
             <Link
-              key={item.href}
-              href={item.href}
+              key={item.route}
+              to={item.route}
               className={cn(
                 'flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 min-h-[44px]',
                 active

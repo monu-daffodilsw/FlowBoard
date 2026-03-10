@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/router';
 import { User, Notification } from '@/types';
 import { Avatar } from '@/components/ui/Avatar';
 import { NotificationPanel } from '@/components/layouts/NotificationPanel';
@@ -23,7 +23,7 @@ export function Navbar({ user, notifications, unreadCount, onMarkAllRead, onMenu
 
   const handleLogout = () => {
     logout();
-    router.push('/login');
+    router.navigate('login');
   };
 
   return (
@@ -115,11 +115,11 @@ export function Navbar({ user, notifications, unreadCount, onMarkAllRead, onMenu
                 <p className="text-sm font-medium text-white truncate">{user.name}</p>
                 <p className="text-xs text-white/40 truncate">{user.email}</p>
               </div>
-              <button onClick={() => { router.push('/profile'); setMenuOpen(false); }}
+              <button onClick={() => { router.navigate('profile'); setMenuOpen(false); }}
                 className="w-full text-left px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors">
                 Profile
               </button>
-              <button onClick={() => { router.push('/settings'); setMenuOpen(false); }}
+              <button onClick={() => { router.navigate('settings'); setMenuOpen(false); }}
                 className="w-full text-left px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors">
                 Settings
               </button>

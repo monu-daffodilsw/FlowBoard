@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Space_Mono, DM_Sans } from 'next/font/google';
+import { RouterProvider } from '@/router';
 import './globals.css';
 
 const spaceMono = Space_Mono({
@@ -22,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <body className={`${spaceMono.variable} ${dmSans.variable} font-sans bg-[#0a0f1e] text-white antialiased`}>
-        {children}
+        <RouterProvider>{children}</RouterProvider>
       </body>
     </html>
   );

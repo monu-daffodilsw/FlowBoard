@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/router';
 import { useTheme } from '@/hooks/useTheme';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { lsClearAll } from '@/services/localStorage';
@@ -28,7 +28,7 @@ export default function SettingsPage() {
 
   const handleClearData = () => {
     lsClearAll();
-    router.push('/login');
+    router.navigate('login');
   };
 
   return (

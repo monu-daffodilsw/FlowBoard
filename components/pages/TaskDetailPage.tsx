@@ -1,6 +1,6 @@
 'use client';
-import { use, useState, useEffect, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter, useParams } from '@/router';
 import { useTasks } from '@/hooks/useTasks';
 import { useProjects } from '@/hooks/useProjects';
 import { useAuth } from '@/hooks/useAuth';
@@ -19,8 +19,8 @@ import { Badge, statusBadge, priorityBadge } from '@/components/ui/Badge';
 const STATUSES: TaskStatus[] = ['Backlog', 'In Progress', 'In Review', 'Done'];
 const PRIORITIES: TaskPriority[] = ['Low', 'Medium', 'High', 'Critical'];
 
-export default function TaskDetailPage({ params }: { params: Promise<{ id: string; taskId: string }> }) {
-  const { id: projectId, taskId } = use(params);
+export default function TaskDetailPage() {
+  const { id: projectId, taskId } = useParams<{ id: string; taskId: string }>();
   const router = useRouter();
   const { getTask, updateTask, addSubtask, toggleSubtask, deleteSubtask, addComment, addAttachment, removeAttachment } = useTasks();
   const { getProject } = useProjects();
@@ -86,7 +86,7 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
     return (
       <div className="flex flex-col items-center justify-center h-64 text-white/30">
         <p className="text-lg mb-4">Task not found</p>
-        <Button variant="ghost" onClick={() => router.push(`/projects/${projectId}`)}>← Back to Board</Button>
+        <Button variant="ghost" onClick={() => router.navigate('projectBoard', { id: projectId })}>← Back to Board</Button>
       </div>
     );
   }
@@ -97,9 +97,9 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 mb-4 text-xs sm:text-sm text-white/40 flex-wrap">
-        <button onClick={() => router.push('/projects')} className="hover:text-white transition-colors">Projects</button>
+        <button onClick={() => router.navigate('projects')} className="hover:text-white transition-colors">Projects</button>
         <span>/</span>
-        <button onClick={() => router.push(`/projects/${projectId}`)} className="hover:text-white transition-colors truncate max-w-[100px] sm:max-w-[180px]">
+        <button onClick={() => router.navigate('projectBoard', { id: projectId })} className="hover:text-white transition-colors truncate max-w-[100px] sm:max-w-[180px]">
           {project?.name}
         </button>
         <span>/</span>
