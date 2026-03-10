@@ -1,5 +1,5 @@
 import { ImgHTMLAttributes, forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 
 export interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> {
   source: { uri: string } | number; // RN-style source prop

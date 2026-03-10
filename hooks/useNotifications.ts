@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { Notification } from '@/types';
-import { lsGet, lsSet, LS_KEYS } from '@/lib/localStorage';
-import { generateId } from '@/lib/utils';
+import { lsGet, lsSet, LS_KEYS } from '@/services/localStorage';
+import { generateId } from '@/utils/utils';
 
 export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);

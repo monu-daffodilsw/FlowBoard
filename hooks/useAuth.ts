@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { User } from '@/types';
-import { lsGet, lsSet, lsRemove, LS_KEYS } from '@/lib/localStorage';
-import { generateId } from '@/lib/utils';
+import { lsGet, lsSet, lsRemove, LS_KEYS } from '@/services/localStorage';
+import { generateId } from '@/utils/utils';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);

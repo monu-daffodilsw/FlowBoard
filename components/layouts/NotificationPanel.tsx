@@ -1,6 +1,6 @@
 'use client';
 import { Notification } from '@/types';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/utils/utils';
 import { Button } from '@/components/ui/Button';
 
 interface NotificationPanelProps {

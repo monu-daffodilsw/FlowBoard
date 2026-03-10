@@ -1,5 +1,5 @@
 import { HTMLAttributes, forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 
 export interface ViewProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;

@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { lsGet, lsSet, LS_KEYS } from '@/lib/localStorage';
+import { lsGet, lsSet, LS_KEYS } from '@/services/localStorage';
 
 type Theme = 'dark' | 'light';
 

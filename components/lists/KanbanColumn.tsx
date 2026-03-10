@@ -1,9 +1,9 @@
 'use client';
 import { useState } from 'react';
 import { Task, TaskStatus } from '@/types';
-import { TaskCard } from './TaskCard';
+import { TaskCard } from '@/components/cards/TaskCard';
 import { Button } from '@/components/ui/Button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 
 interface KanbanColumnProps {
   status: TaskStatus;

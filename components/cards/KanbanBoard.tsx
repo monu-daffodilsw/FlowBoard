@@ -1,7 +1,7 @@
 'use client';
 import { useRef } from 'react';
 import { Task, TaskStatus } from '@/types';
-import { KanbanColumn } from './KanbanColumn';
+import { KanbanColumn } from '@/components/lists/KanbanColumn';
 
 const STATUSES: TaskStatus[] = ['Backlog', 'In Progress', 'In Review', 'Done'];
 

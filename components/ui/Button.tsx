@@ -2,7 +2,7 @@
 import { ReactNode } from 'react';
 import { Pressable } from '@/components/core/Pressable';
 import { Text } from '@/components/core/Text';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';

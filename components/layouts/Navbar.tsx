@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, Notification } from '@/types';
 import { Avatar } from '@/components/ui/Avatar';
-import { NotificationPanel } from './NotificationPanel';
+import { NotificationPanel } from '@/components/layouts/NotificationPanel';
 import { useAuth } from '@/hooks/useAuth';
 
 interface NavbarProps {

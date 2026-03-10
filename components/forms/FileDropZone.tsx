@@ -1,8 +1,8 @@
 'use client';
 import { useState, useRef } from 'react';
 import { Attachment } from '@/types';
-import { generateId, formatFileSize } from '@/lib/utils';
-import { cn } from '@/lib/utils';
+import { generateId, formatFileSize } from '@/utils/utils';
+import { cn } from '@/utils/utils';
 
 interface FileDropZoneProps {
   attachments: Attachment[];

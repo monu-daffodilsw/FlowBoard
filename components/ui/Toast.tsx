@@ -1,6 +1,6 @@
 'use client';
 import { useState, useCallback, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 
 interface ToastProps {
   message: string;

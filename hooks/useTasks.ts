@@ -1,9 +1,9 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { Task, TaskStatus, TaskPriority, Subtask, Comment, ActivityEntry, Attachment } from '@/types';
-import { lsGet, lsSet, LS_KEYS } from '@/lib/localStorage';
-import { generateId } from '@/lib/utils';
-import { MOCK_TASKS } from '@/lib/mockData';
+import { lsGet, lsSet, LS_KEYS } from '@/services/localStorage';
+import { generateId } from '@/utils/utils';
+import { MOCK_TASKS } from '@/utils/mockData';
 
 export function useTasks(projectId?: string) {
   const [allTasks, setAllTasks] = useState<Task[]>([]);

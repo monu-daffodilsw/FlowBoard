@@ -1,9 +1,9 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { Project } from '@/types';
-import { lsGet, lsSet, LS_KEYS } from '@/lib/localStorage';
-import { generateId } from '@/lib/utils';
-import { MOCK_PROJECTS } from '@/lib/mockData';
+import { lsGet, lsSet, LS_KEYS } from '@/services/localStorage';
+import { generateId } from '@/utils/utils';
+import { MOCK_PROJECTS } from '@/utils/mockData';
 
 export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);

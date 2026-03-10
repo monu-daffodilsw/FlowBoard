@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { Task } from '@/types';
 import { Badge, priorityBadge } from '@/components/ui/Badge';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/utils/utils';
 
 interface TaskCardProps {
   task: Task;
