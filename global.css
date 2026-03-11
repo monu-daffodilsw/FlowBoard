@@ -2,3 +2,9 @@
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css";
 @import "nativewind/theme";
+
+@theme {
+  /* Map Tailwind font utilities to expo-font registered names on native */
+  --font-sans: DMSans_400Regular;
+  --font-mono: SpaceMono_400Regular;
+}
