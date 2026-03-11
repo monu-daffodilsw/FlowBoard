@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@ui-library": [
+        "./dependencies/ui-library/index.ts"
       ]
     }
   },

@@ -1,0 +1,11 @@
+{
+  "name": "ui-library",
+  "version": "0.1.0",
+  "main": "index.ts",
+  "types": "index.ts",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "dependencies": {}
+}

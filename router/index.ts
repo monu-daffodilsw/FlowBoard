@@ -1,7 +1,24 @@
-export { RouterProvider } from './context';
-export { useRouter, usePathname, useParams } from './hooks';
-export { Link } from './Link';
-export { buildPath, matchPath } from './routes';
+import { createElement, ReactNode } from 'react';
+import { RouterProvider as LibRouterProvider, useRouter as useLibRouter } from '@ui-library';
+import { routes } from './routes';
+import type { RouteName } from './routes';
+
+/** Project-specific RouterProvider — pre-bound with FlowBoard routes. */
+export function RouterProvider({ children, initialPath }: { children: ReactNode; initialPath?: string }) {
+  return createElement(LibRouterProvider, { routes, initialPath, children });
+}
+
+/** Typed useRouter — navigate/replace accept RouteName instead of plain string. */
+export function useRouter() {
+  const handle = useLibRouter();
+  return {
+    navigate: (name: RouteName, params?: Record<string, string>) => handle.navigate(name, params),
+    replace: (name: RouteName, params?: Record<string, string>) => handle.replace(name, params),
+    back: handle.back,
+  };
+}
+
+export { useRouterContext, usePathname, useParams, Link } from '@ui-library';
+export type { RouterHandle, LinkProps, RouterContextValue } from '@ui-library';
+export { buildPath, matchPath, routes } from './routes';
 export type { RouteName } from './routes';
-export type { RouterHandle } from './hooks';
-export type { LinkProps } from './Link';

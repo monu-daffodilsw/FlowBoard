@@ -1,12 +1,12 @@
 'use client';
 import { Link, usePathname, type RouteName } from '@/router';
-import { cn } from '@/utils/utils';
-import { View } from '@/components/core/View';
-import { Text } from '@/components/core/Text';
-import { Pressable } from '@/components/core/Pressable';
-import { ScrollView } from '@/components/core/ScrollView';
-import { Svg } from '@/components/core/Svg';
-import { Path } from '@/components/core/Path';
+import { cn } from '@ui-library';
+import { View } from '@ui-library';
+import { Text } from '@ui-library';
+import { Pressable } from '@ui-library';
+import { ScrollView } from '@ui-library';
+import { Svg } from '@ui-library';
+import { Path } from '@ui-library';
 
 interface SidebarProps {
   collapsed: boolean;

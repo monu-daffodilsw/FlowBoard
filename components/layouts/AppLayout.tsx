@@ -1,23 +1,22 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { isNative } from '@/utils/platform';
-import { useSafeInsets } from '@/hooks/useSafeInsets';
-import { useRouter, usePathname } from '@/router/hooks';
-import { Link } from '@/router/Link';
-import type { RouteName } from '@/router/routes';
+import { isNative } from '@ui-library';
+import { useSafeInsets } from '@ui-library';
+import { useRouter, usePathname, Link } from '@/router';
+import type { RouteName } from '@/router';
 import { Sidebar } from '@/components/layouts/Sidebar';
 import { Navbar } from '@/components/layouts/Navbar';
-import { ScrollView } from '@/components/core/ScrollView';
+import { ScrollView } from '@ui-library';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
-import { useOnlineStatus } from '@/hooks/useOnlineStatus';
-import { cn } from '@/utils/utils';
-import { View } from '@/components/core/View';
-import { Text } from '@/components/core/Text';
-import { Pressable } from '@/components/core/Pressable';
-import { Svg } from '@/components/core/Svg';
-import { Path } from '@/components/core/Path';
-import { ActivityIndicator } from '@/components/core/ActivityIndicator';
+import { useOnlineStatus } from '@ui-library';
+import { cn } from '@ui-library';
+import { View } from '@ui-library';
+import { Text } from '@ui-library';
+import { Pressable } from '@ui-library';
+import { Svg } from '@ui-library';
+import { Path } from '@ui-library';
+import { ActivityIndicator } from '@ui-library';
 
 const NAV_ITEMS: { route: RouteName; path: string; label: string; d: string }[] = [
   { route: 'dashboard', path: '/dashboard', label: 'Home',     d: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },

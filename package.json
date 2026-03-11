@@ -12,6 +12,7 @@
     "expo": "expo start"
   },
   "dependencies": {
+    "ui-library": "file:./dependencies/ui-library",
     "@expo-google-fonts/dm-sans": "^0.4.2",
     "@expo-google-fonts/space-mono": "^0.4.2",
     "@expo/metro-runtime": "~55.0.6",

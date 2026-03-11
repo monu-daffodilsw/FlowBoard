@@ -1,10 +1,10 @@
 import { useRouter } from '@/router';
 import { Task } from '@/types';
 import { Badge, priorityBadge } from '@/components/ui/Badge';
-import { formatDate } from '@/utils/utils';
-import { View } from '@/components/core/View';
-import { Text } from '@/components/core/Text';
-import { Pressable } from '@/components/core/Pressable';
+import { formatDate } from '@ui-library';
+import { View } from '@ui-library';
+import { Text } from '@ui-library';
+import { Pressable } from '@ui-library';
 
 interface TaskCardProps {
   task: Task;

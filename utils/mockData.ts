@@ -1,5 +1,5 @@
 import { Project, Task } from '@/types';
-import { generateId } from './utils';
+import { generateId } from '@ui-library';
 
 const now = new Date().toISOString();
 const yesterday = new Date(Date.now() - 86400000).toISOString();

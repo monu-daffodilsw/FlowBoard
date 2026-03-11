@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { User } from '@/types';
 import { storageGet, storageSet, storageRemove, LS_KEYS } from '@/services/storage';
-import { generateId } from '@/utils/utils';
+import { generateId } from '@ui-library';
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);

@@ -1,13 +1,13 @@
 'use client';
 import { useRouter } from '@/router';
 import { useTheme } from '@/hooks/useTheme';
-import { useOnlineStatus } from '@/hooks/useOnlineStatus';
-import { useBrowserNotifications } from '@/hooks/useBrowserNotifications';
+import { useOnlineStatus } from '@ui-library';
+import { useBrowserNotifications } from '@ui-library';
 import { lsClearAll } from '@/services/localStorage';
-import { Button } from '@/components/ui/Button';
-import { View } from '@/components/core/View';
-import { Text } from '@/components/core/Text';
-import { Pressable } from '@/components/core/Pressable';
+import { Button } from '@ui-library';
+import { View } from '@ui-library';
+import { Text } from '@ui-library';
+import { Pressable } from '@ui-library';
 import { useState } from 'react';
 
 export default function SettingsPage() {

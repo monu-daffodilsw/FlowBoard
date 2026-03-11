@@ -2,12 +2,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter, Link } from '@/router';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { View } from '@/components/core/View';
-import { Text } from '@/components/core/Text';
-import { Svg } from '@/components/core/Svg';
-import { Path } from '@/components/core/Path';
+import { Button } from '@ui-library';
+import { Input } from '@ui-library';
+import { View } from '@ui-library';
+import { Text } from '@ui-library';
+import { Svg } from '@ui-library';
+import { Path } from '@ui-library';
 
 export default function LoginPage() {
   const router = useRouter();

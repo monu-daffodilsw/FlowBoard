@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Notification } from '@/types';
 import { lsGet, lsSet, LS_KEYS } from '@/services/localStorage';
-import { generateId } from '@/utils/utils';
+import { generateId } from '@ui-library';
 
 export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>(() =>

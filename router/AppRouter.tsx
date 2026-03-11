@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
-import { useRouterContext } from './context';
-import { useRouter } from './hooks';
+import { useRouterContext } from '@ui-library';
+import { useRouter } from './index';
 import { AppLayout } from '@/components/layouts/AppLayout';
 import LoginPage from '@/components/pages/LoginPage';
 import RegisterPage from '@/components/pages/RegisterPage';

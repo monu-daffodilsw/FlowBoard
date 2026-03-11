@@ -5,17 +5,17 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTasks } from '@/hooks/useTasks';
 import { useProjects } from '@/hooks/useProjects';
 import { useNotifications } from '@/hooks/useNotifications';
-import { StatsCard } from '@/components/cards/StatsCard';
-import { ClockWidget } from '@/components/cards/ClockWidget';
-import { CanvasChart } from '@/components/cards/CanvasChart';
-import { GeoWidget } from '@/components/cards/GeoWidget';
+import { StatsCard } from '@ui-library';
+import { ClockWidget } from '@ui-library';
+import { CanvasChart } from '@ui-library';
+import { GeoWidget } from '@ui-library';
 import { Badge, statusBadge } from '@/components/ui/Badge';
-import { formatDate } from '@/utils/utils';
-import { View } from '@/components/core/View';
-import { Text } from '@/components/core/Text';
-import { Pressable } from '@/components/core/Pressable';
-import { Svg } from '@/components/core/Svg';
-import { Path } from '@/components/core/Path';
+import { formatDate } from '@ui-library';
+import { View } from '@ui-library';
+import { Text } from '@ui-library';
+import { Pressable } from '@ui-library';
+import { Svg } from '@ui-library';
+import { Path } from '@ui-library';
 
 export default function DashboardPage() {
   const { user } = useAuth();

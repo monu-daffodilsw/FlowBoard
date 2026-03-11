@@ -1,7 +1,7 @@
-import { View } from '@/components/core/View';
-import { Text } from '@/components/core/Text';
-import { Pressable } from '@/components/core/Pressable';
-import { useRouter } from '@/router/hooks';
+import { View } from '@ui-library';
+import { Text } from '@ui-library';
+import { Pressable } from '@ui-library';
+import { useRouter } from '@/router';
 
 export default function NotFound() {
   const { navigate } = useRouter();
