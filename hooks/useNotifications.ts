@@ -8,8 +8,10 @@ export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    const stored = lsGet<Notification[]>(LS_KEYS.NOTIFICATIONS) ?? [];
-    setNotifications(stored);
+    (async () => {
+      const stored = await lsGet<Notification[]>(LS_KEYS.NOTIFICATIONS) ?? [];
+      setNotifications(stored);
+    })();
   }, []);
 
   const unreadCount = notifications.filter(n => !n.read).length;

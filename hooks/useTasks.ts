@@ -9,13 +9,15 @@ export function useTasks(projectId?: string) {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    const stored = lsGet<Task[]>(LS_KEYS.TASKS);
-    if (stored && stored.length > 0) {
-      setAllTasks(stored);
-    } else {
-      lsSet(LS_KEYS.TASKS, MOCK_TASKS);
-      setAllTasks(MOCK_TASKS);
-    }
+    (async () => {
+      const stored = await lsGet<Task[]>(LS_KEYS.TASKS);
+      if (stored && stored.length > 0) {
+        setAllTasks(stored);
+      } else {
+        lsSet(LS_KEYS.TASKS, MOCK_TASKS);
+        setAllTasks(MOCK_TASKS);
+      }
+    })();
   }, []);
 
   const tasks = projectId ? allTasks.filter(t => t.projectId === projectId) : allTasks;

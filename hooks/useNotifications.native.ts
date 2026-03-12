@@ -1,12 +1,17 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Notification } from '@/types';
 import { lsGet, lsSet, LS_KEYS } from '@/services/localStorage';
 import { generateId } from '@ui-library';
 
 export function useNotifications() {
-  const [notifications, setNotifications] = useState<Notification[]>(() =>
-    lsGet<Notification[]>(LS_KEYS.NOTIFICATIONS) ?? []
-  );
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const stored = await lsGet<Notification[]>(LS_KEYS.NOTIFICATIONS) ?? [];
+      setNotifications(stored);
+    })();
+  }, []);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 

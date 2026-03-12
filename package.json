@@ -12,7 +12,6 @@
     "expo": "expo start"
   },
   "dependencies": {
-    "ui-library": "file:./dependencies/ui-library",
     "@expo-google-fonts/dm-sans": "^0.4.2",
     "@expo-google-fonts/space-mono": "^0.4.2",
     "@expo/metro-runtime": "~55.0.6",
@@ -36,7 +35,8 @@
     "react-native-screens": "~4.23.0",
     "react-native-svg": "15.15.3",
     "react-native-web": "^0.21.0",
-    "react-native-worklets": "^0.7.4"
+    "react-native-worklets": "^0.7.4",
+    "ui-library": "file:./dependencies/ui-library"
   },
   "overrides": {
     "lightningcss": "1.30.1"

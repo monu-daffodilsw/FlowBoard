@@ -1,3 +1,6 @@
+// ── Storage ───────────────────────────────────────────────────────────────────
+export { Storage } from './services/Storage';
+
 // ── Core platform primitives ──────────────────────────────────────────────────
 export * from './core';
 

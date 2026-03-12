@@ -9,13 +9,15 @@ export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    const stored = lsGet<Project[]>(LS_KEYS.PROJECTS);
-    if (stored && stored.length > 0) {
-      setProjects(stored);
-    } else {
-      lsSet(LS_KEYS.PROJECTS, MOCK_PROJECTS);
-      setProjects(MOCK_PROJECTS);
-    }
+    (async () => {
+      const stored = await lsGet<Project[]>(LS_KEYS.PROJECTS);
+      if (stored && stored.length > 0) {
+        setProjects(stored);
+      } else {
+        lsSet(LS_KEYS.PROJECTS, MOCK_PROJECTS);
+        setProjects(MOCK_PROJECTS);
+      }
+    })();
   }, []);
 
   const save = (updated: Project[]) => {

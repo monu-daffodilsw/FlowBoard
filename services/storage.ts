@@ -1,7 +1,6 @@
-/**
- * WEB storage — synchronous localStorage
- * Next.js picks this file when bundling for web.
- */
+import { Storage } from '@ui-library';
+
+export { Storage };
 
 export const LS_KEYS = {
   USER: 'flowboard_user',
@@ -13,31 +12,21 @@ export const LS_KEYS = {
 
 export type StorageKey = typeof LS_KEYS[keyof typeof LS_KEYS];
 
-export function storageGet<T>(key: string): T | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    const item = window.localStorage.getItem(key);
-    return item ? (JSON.parse(item) as T) : null;
-  } catch {
-    return null;
-  }
+export async function storageGet<T>(key: string): Promise<T | null> {
+  const item = await Storage.getItem(key);
+  return item ? (JSON.parse(item) as T) : null;
 }
 
-export function storageSet<T>(key: string, value: T): void {
-  if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  } catch {}
+export async function storageSet<T>(key: string, value: T): Promise<void> {
+  await Storage.setItem(key, JSON.stringify(value));
 }
 
-export function storageRemove(key: string): void {
-  if (typeof window === 'undefined') return;
-  window.localStorage.removeItem(key);
+export async function storageRemove(key: string): Promise<void> {
+  await Storage.removeItem(key);
 }
 
-export function storageClearAll(): void {
-  if (typeof window === 'undefined') return;
-  Object.keys(window.localStorage)
-    .filter(k => k.startsWith('flowboard_'))
-    .forEach(k => window.localStorage.removeItem(k));
+export async function storageClearAll(): Promise<void> {
+  const allKeys = await Storage.getAllKeys();
+  const keys = allKeys.filter(k => k.startsWith('flowboard_'));
+  await Storage.multiRemove(keys);
 }

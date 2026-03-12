@@ -17,7 +17,7 @@ export default function SettingsPage() {
   const { permission: notifPermission, request: requestNotifPermission } = useBrowserNotifications();
   const [confirmClear, setConfirmClear] = useState(false);
 
-  const handleClearData = () => { lsClearAll(); router.navigate('login'); };
+  const handleClearData = async () => { await lsClearAll(); router.navigate('login'); };
 
   return (
     <View className="max-w-xl">
