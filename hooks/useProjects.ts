@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Project } from '@/types';
 import { lsGet, lsSet, LS_KEYS } from '@/services/localStorage';
-import { generateId } from '@ui-library';
+import { generateId } from '@ultra-ui-library';
 import { MOCK_PROJECTS } from '@/utils/mockData';
 
 export function useProjects() {

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Task, TaskStatus } from '@/types';
 import { TaskCard } from '@/components/cards/TaskCard';
-import { Button } from '@ui-library';
-import { View } from '@ui-library';
-import { Text } from '@ui-library';
-import { TextInput } from '@ui-library';
-import { ScrollView } from '@ui-library';
-import { cn } from '@ui-library';
+import { Button } from '@ultra-ui-library';
+import { View } from '@ultra-ui-library';
+import { Text } from '@ultra-ui-library';
+import { TextInput } from '@ultra-ui-library';
+import { ScrollView } from '@ultra-ui-library';
+import { cn } from '@ultra-ui-library';
 
 interface KanbanColumnProps {
   status: TaskStatus;

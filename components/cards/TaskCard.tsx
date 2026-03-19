@@ -2,7 +2,7 @@
 import { useRouter } from '@/router';
 import { Task } from '@/types';
 import { Badge, priorityBadge } from '@/components/ui/Badge';
-import { formatDate } from '@ui-library';
+import { formatDate } from '@ultra-ui-library';
 
 interface TaskCardProps {
   task: Task;

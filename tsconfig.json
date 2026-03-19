@@ -26,8 +26,8 @@
       "@/*": [
         "./*"
       ],
-      "@ui-library": [
-        "./dependencies/ui-library/index.ts"
+      "@ultra-ui-library": [
+        "./dependencies/ultra-ui-library/index.ts"
       ]
     }
   },

@@ -1,5 +1,5 @@
 import { createElement, ReactNode } from 'react';
-import { RouterProvider as LibRouterProvider, useRouter as useLibRouter } from '@ui-library';
+import { RouterProvider as LibRouterProvider, useRouter as useLibRouter } from '@ultra-ui-library';
 import { routes } from './routes';
 import type { RouteName } from './routes';
 
@@ -18,7 +18,7 @@ export function useRouter() {
   };
 }
 
-export { useRouterContext, usePathname, useParams, Link } from '@ui-library';
-export type { RouterHandle, LinkProps, RouterContextValue } from '@ui-library';
+export { useRouterContext, usePathname, useParams, Link } from '@ultra-ui-library';
+export type { RouterHandle, LinkProps, RouterContextValue } from '@ultra-ui-library';
 export { buildPath, matchPath, routes } from './routes';
 export type { RouteName } from './routes';

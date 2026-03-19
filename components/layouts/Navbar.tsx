@@ -2,15 +2,15 @@
 import { useState } from 'react';
 import { useRouter } from '@/router';
 import { User, Notification } from '@/types';
-import { Avatar } from '@ui-library';
-import { NotificationPanel } from '@ui-library';
+import { Avatar } from '@ultra-ui-library';
+import { NotificationPanel } from '@ultra-ui-library';
 import { useAuth } from '@/hooks/useAuth';
-import { View } from '@ui-library';
-import { Text } from '@ui-library';
-import { Pressable } from '@ui-library';
-import { TextInput } from '@ui-library';
-import { Svg } from '@ui-library';
-import { Path } from '@ui-library';
+import { View } from '@ultra-ui-library';
+import { Text } from '@ultra-ui-library';
+import { Pressable } from '@ultra-ui-library';
+import { TextInput } from '@ultra-ui-library';
+import { Svg } from '@ultra-ui-library';
+import { Path } from '@ultra-ui-library';
 
 interface NavbarProps {
   user: User;

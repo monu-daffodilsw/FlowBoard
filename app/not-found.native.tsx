@@ -1,6 +1,6 @@
-import { View } from '@ui-library';
-import { Text } from '@ui-library';
-import { Pressable } from '@ui-library';
+import { View } from '@ultra-ui-library';
+import { Text } from '@ultra-ui-library';
+import { Pressable } from '@ultra-ui-library';
 import { useRouter } from '@/router';
 
 export default function NotFound() {

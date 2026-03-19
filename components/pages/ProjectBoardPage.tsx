@@ -4,10 +4,10 @@ import { useProjects } from '@/hooks/useProjects';
 import { useTasks } from '@/hooks/useTasks';
 import { KanbanBoard } from '@/components/cards/KanbanBoard';
 import { TaskStatus } from '@/types';
-import { Button } from '@ui-library';
-import { View } from '@ui-library';
-import { Text } from '@ui-library';
-import { Pressable } from '@ui-library';
+import { Button } from '@ultra-ui-library';
+import { View } from '@ultra-ui-library';
+import { Text } from '@ultra-ui-library';
+import { Pressable } from '@ultra-ui-library';
 
 export default function ProjectBoardPage() {
   const { id } = useParams<{ id: string }>();

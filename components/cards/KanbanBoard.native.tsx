@@ -1,6 +1,6 @@
 import { Task, TaskStatus } from '@/types';
 import { KanbanColumn } from '@/components/lists/KanbanColumn';
-import { ScrollView } from '@ui-library';
+import { ScrollView } from '@ultra-ui-library';
 
 const STATUSES: TaskStatus[] = ['Backlog', 'In Progress', 'In Review', 'Done'];
 

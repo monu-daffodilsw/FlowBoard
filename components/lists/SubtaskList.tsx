@@ -1,5 +1,5 @@
 'use client';
-import { ChecklistList, ChecklistItem } from '@ui-library';
+import { ChecklistList, ChecklistItem } from '@ultra-ui-library';
 import { Subtask } from '@/types';
 
 interface SubtaskListProps {

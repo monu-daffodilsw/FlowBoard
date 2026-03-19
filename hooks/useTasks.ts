@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Task, TaskStatus, TaskPriority, Subtask, Comment, ActivityEntry, Attachment } from '@/types';
 import { lsGet, lsSet, LS_KEYS } from '@/services/localStorage';
-import { generateId } from '@ui-library';
+import { generateId } from '@ultra-ui-library';
 import { MOCK_TASKS } from '@/utils/mockData';
 
 export function useTasks(projectId?: string) {

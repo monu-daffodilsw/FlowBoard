@@ -1,5 +1,5 @@
-import { buildPath as libBuildPath, matchPath as libMatchPath } from '@ui-library';
-import type { RouteDefinition } from '@ui-library';
+import { buildPath as libBuildPath, matchPath as libMatchPath } from '@ultra-ui-library';
+import type { RouteDefinition } from '@ultra-ui-library';
 
 export type RouteName =
   | 'login'

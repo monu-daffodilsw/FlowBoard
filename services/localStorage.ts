@@ -1,4 +1,4 @@
-import { Storage } from '@ui-library';
+import { Storage } from '@ultra-ui-library';
 
 export { Storage };
 
